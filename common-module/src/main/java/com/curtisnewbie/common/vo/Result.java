@@ -3,9 +3,11 @@ package com.curtisnewbie.common.vo;
 import java.io.Serializable;
 
 /**
+ * Result for frontend communication
+ *
  * @author yongjie.zhuang
  */
-public class Resp<T> implements Serializable {
+public class Result<T> implements Serializable {
 
     /** message being returned */
     private String msg;
@@ -16,24 +18,24 @@ public class Resp<T> implements Serializable {
     /** data */
     private T data;
 
-    public static <T> Resp<T> ok() {
-        var resp = new Resp<T>();
+    public static <T> Result<T> ok() {
+        var resp = new Result<T>();
         resp.hasError = false;
         resp.msg = "";
         resp.data = null;
         return resp;
     }
 
-    public static <T> Resp<T> of(T data) {
-        var resp = new Resp<T>();
+    public static <T> Result<T> of(T data) {
+        var resp = new Result<T>();
         resp.hasError = false;
         resp.msg = null;
         resp.data = data;
         return resp;
     }
 
-    public static <T> Resp<T> error(String errMsg) {
-        var resp = new Resp<T>();
+    public static <T> Result<T> error(String errMsg) {
+        var resp = new Result<T>();
         resp.hasError = true;
         resp.msg = errMsg;
         resp.data = null;
@@ -66,7 +68,7 @@ public class Resp<T> implements Serializable {
 
     @Override
     public String toString() {
-        return "Resp{" +
+        return "Result{" +
                 "msg='" + msg + '\'' +
                 ", hasError=" + hasError +
                 ", data=" + data +
