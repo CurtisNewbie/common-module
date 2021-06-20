@@ -14,11 +14,6 @@ public class MsgEmbeddedException extends Exception {
     private String msg;
 
     /**
-     * Message in stacktrace
-     */
-    private String msgInStack;
-
-    /**
      * @param msg message that can be both shown in stacktrace and later retrieved by getter/setter
      */
     public MsgEmbeddedException(String msg) {
