@@ -1,7 +1,7 @@
 package com.curtisnewbie.common.enums;
 
 /**
- * An Enum with a value associated with
+ * An Enum with a value, this is used together with {@link com.curtisnewbie.common.util.EnumUtils}
  * <br>
  * For example,
  * <pre>
