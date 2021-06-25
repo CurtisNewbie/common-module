@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -21,7 +22,7 @@ public final class BeanCopyUtils {
     /**
      * Copy properties, and convert to the given type
      *
-     * @param source     source object
+     * @param source     source object, it should be classic POJO(e.g., it shouldn't be instance of {@link Collection})
      * @param targetType targetType
      * @param <T>        target's generic type
      * @param <V>        source's generic type
@@ -31,6 +32,10 @@ public final class BeanCopyUtils {
         Objects.requireNonNull(targetType);
         if (source == null) {
             return null;
+        }
+        // source shouldn't be object of List
+        if (source instanceof Collection) {
+            throw new IllegalStateException("T is a Collection, which is not supported");
         }
         V v;
         try {
