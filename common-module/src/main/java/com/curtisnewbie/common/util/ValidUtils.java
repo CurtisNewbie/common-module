@@ -15,15 +15,14 @@ import java.util.Objects;
  * @author yongjie.zhuang
  */
 public final class ValidUtils {
-    private static final String DEFAULT_NON_NULL_MSG = "Please enter required content";
-    private static final String DEFAULT_STRING_NOT_EMPTY_MSG = "It should not be empty";
+    private static final String DEFAULT_NON_NULL_MSG = "Required parameters cannot be null or empty";
 
     private ValidUtils() {
 
     }
 
     public static void requireNotEmpty(String text) throws MsgEmbeddedException {
-        requireNotEmpty(text, DEFAULT_STRING_NOT_EMPTY_MSG);
+        requireNotEmpty(text, DEFAULT_NON_NULL_MSG);
     }
 
     public static void requireNotEmpty(String text, String errMsg) throws MsgEmbeddedException {
