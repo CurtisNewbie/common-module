@@ -1,9 +1,13 @@
 package com.curtisnewbie.common.vo;
 
+import java.io.Serializable;
+
 /**
+ * Info for pagination
+ *
  * @author yongjie.zhuang
  */
-public class PagingVo {
+public class PagingVo implements Serializable {
 
     /**
      * Size of a page
