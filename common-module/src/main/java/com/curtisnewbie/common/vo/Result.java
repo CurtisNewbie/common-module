@@ -19,7 +19,7 @@ public class Result<T> implements Serializable {
     private T data;
 
     public static <T> Result<T> ok() {
-        var resp = new Result<T>();
+        Result<T> resp = new Result<T>();
         resp.hasError = false;
         resp.msg = "";
         resp.data = null;
@@ -27,7 +27,7 @@ public class Result<T> implements Serializable {
     }
 
     public static <T> Result<T> of(T data) {
-        var resp = new Result<T>();
+        Result<T> resp = new Result<T>();
         resp.hasError = false;
         resp.msg = null;
         resp.data = data;
@@ -35,7 +35,7 @@ public class Result<T> implements Serializable {
     }
 
     public static <T> Result<T> error(String errMsg) {
-        var resp = new Result<T>();
+        Result<T> resp = new Result<T>();
         resp.hasError = true;
         resp.msg = errMsg;
         resp.data = null;
