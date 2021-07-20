@@ -12,14 +12,14 @@ package com.curtisnewbie.common.enums;
  *      }
  * </pre>
  *
- * @param <T> The Enum type that implements this interface
- * @param <V> The value type of this enum
+ * @param <EnumType> The Enum type that implements this interface
+ * @param <ValueType> The value type of this enum
  * @author yongjie.zhuang
  */
-public interface ValueEnum<T extends Enum<T> & ValueEnum<T, V>, V> {
+public interface ValueEnum<EnumType extends Enum<EnumType> & ValueEnum<EnumType, ValueType>, ValueType> {
 
     /**
      * Get int value
      */
-    V getValue();
+    ValueType getValue();
 }
