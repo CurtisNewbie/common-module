@@ -4,6 +4,7 @@ package com.curtisnewbie.common.util;
 import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
 import org.springframework.util.StringUtils;
 
+import java.util.Collection;
 import java.util.Objects;
 
 /**
@@ -19,6 +20,25 @@ public final class ValidUtils {
 
     private ValidUtils() {
 
+    }
+
+    public static <T> void requireNotEmpty(T[] c, String msg) throws MsgEmbeddedException {
+        requireNonNull(c);
+        if (c.length == 0)
+            throw new MsgEmbeddedException(msg);
+    }
+
+    public static <T> void requireNotEmpty(T[] c) throws MsgEmbeddedException {
+        requireNonNull(c);
+        if (c.length == 0)
+            throw new MsgEmbeddedException();
+        requireNotEmpty(c, DEFAULT_NON_NULL_MSG);
+    }
+
+    public static void requireNotEmpty(Collection<?> c) throws MsgEmbeddedException {
+        requireNonNull(c);
+        if (c.isEmpty())
+            throw new MsgEmbeddedException(DEFAULT_NON_NULL_MSG);
     }
 
     public static void requireNotEmpty(String text) throws MsgEmbeddedException {
