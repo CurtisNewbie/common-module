@@ -6,17 +6,16 @@ package com.curtisnewbie.common.enums;
  * For example,
  * <pre>
  *     {@code
- *      public enum UserRole implements ValueEnum<UserRole, String> {
+ *      public enum UserRole implements ValueEnum<String> {
  *          ...
  *      }
  *      }
  * </pre>
  *
- * @param <EnumType> The Enum type that implements this interface
  * @param <ValueType> The value type of this enum
  * @author yongjie.zhuang
  */
-public interface ValueEnum<EnumType extends Enum<EnumType> & ValueEnum<EnumType, ValueType>, ValueType> {
+public interface ValueEnum<ValueType> {
 
     /**
      * Get int value

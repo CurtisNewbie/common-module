@@ -43,7 +43,7 @@ public final class EnumUtils {
      * @param <V>   type of the value in enum
      * @return enum
      */
-    public static <T extends Enum<T> & ValueEnum<T, V>, V> T parse(V value, Class<T> clazz) {
+    public static <T extends Enum<T> & ValueEnum<V>, V> T parse(V value, Class<T> clazz) {
         T[] enums = clazz.getEnumConstants();
         if (enums == null)
             return null;
