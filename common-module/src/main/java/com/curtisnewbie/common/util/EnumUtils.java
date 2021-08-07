@@ -22,7 +22,7 @@ public final class EnumUtils {
      * @param <T>   class of the enum
      * @return enum
      */
-    public static <T extends Enum<T> & IntEnum<T>> T parse(int v, Class<T> clazz) {
+    public static <T extends Enum<T> & IntEnum> T parse(int v, Class<T> clazz) {
         T[] enums = clazz.getEnumConstants();
         if (enums == null)
             return null;
