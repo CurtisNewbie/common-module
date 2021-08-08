@@ -12,12 +12,12 @@ public class PagingVo implements Serializable {
     /**
      * Size of a page
      */
-    private Integer limit;
+    private Integer limit = 10;
 
     /**
      * Page number
      */
-    private Integer page;
+    private Integer page = 1;
 
     /**
      * Total items
