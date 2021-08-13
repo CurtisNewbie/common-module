@@ -5,11 +5,11 @@ import org.springframework.core.convert.converter.Converter;
 import java.util.Date;
 
 /**
- * Custom long -> Date converter
+ * Custom Long (epoch time) -> Date converter
  *
  * @author yongjie.zhuang
  */
-public class LongDateConverter implements Converter<Long, Date> {
+public class EpochLongDateConverter implements Converter<Long, Date> {
 
     @Override
     public Date convert(Long epochTime) {

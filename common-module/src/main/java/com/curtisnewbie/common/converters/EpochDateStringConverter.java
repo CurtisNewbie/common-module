@@ -5,17 +5,17 @@ import org.springframework.core.convert.converter.Converter;
 import java.util.Date;
 
 /**
- * Custom Date -> Long (Epoch time) Converters
+ * Custom Date -> String (Epoch time) Converters
  *
  * @author yongjie.zhuang
  */
-public class DateLongConverter implements Converter<Date, Long> {
+public class EpochDateStringConverter implements Converter<Date, String> {
 
     @Override
-    public Long convert(Date d) {
+    public String convert(Date d) {
         if (d == null)
             return null;
 
-        return d.getTime();
+        return String.valueOf(d.getTime());
     }
 }
