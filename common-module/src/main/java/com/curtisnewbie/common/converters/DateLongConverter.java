@@ -9,7 +9,7 @@ import java.util.Date;
  *
  * @author yongjie.zhuang
  */
-public class DateLongConverters implements Converter<Date, Long> {
+public class DateLongConverter implements Converter<Date, Long> {
 
     @Override
     public Long convert(Date d) {
