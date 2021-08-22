@@ -1,7 +1,9 @@
 package com.curtisnewbie.common.util;
 
 import java.text.SimpleDateFormat;
+import java.time.*;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Utils for date
@@ -38,4 +40,46 @@ public final class DateUtils {
         return new SimpleDateFormat(DD_MM_YYYY_HH_MM);
     }
 
+    /**
+     * Get epoch time of start of the given localDate
+     */
+    public static long startTimeOf(LocalDate ld) {
+        Objects.requireNonNull(ld);
+        return Date.from(ld.atStartOfDay(ZoneId.systemDefault()).toInstant()).getTime();
+    }
+
+    /**
+     * Get epoch time of the localDatetime
+     */
+    public static long getEpochTime(LocalDateTime ldt) {
+        Objects.requireNonNull(ldt);
+        return ldt.atZone(ZoneId.systemDefault()).toInstant().getEpochSecond();
+    }
+
+    /**
+     * Convert LocalDateTime to Date
+     */
+    public static Date dateOf(LocalDateTime ldt) {
+        Objects.requireNonNull(ldt);
+        return Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    /**
+     * Convert Date to LocalDate
+     */
+    public static LocalDate localDateOf(Date date) {
+        Objects.requireNonNull(date);
+        return date.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+    }
+
+    /**
+     * Convert epoch milliseconds to LocalDate
+     */
+    public static LocalDate localDateOf(long epochTime) {
+        return Instant.ofEpochMilli(epochTime)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+    }
 }
