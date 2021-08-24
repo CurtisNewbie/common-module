@@ -75,6 +75,16 @@ public final class DateUtils {
     }
 
     /**
+     * Convert Date to LocalDate
+     */
+    public static LocalDateTime localDateTimeOf(Date date) {
+        Objects.requireNonNull(date);
+        return date.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+    }
+
+    /**
      * Convert epoch milliseconds to LocalDate
      */
     public static LocalDate localDateOf(long epochTime) {
