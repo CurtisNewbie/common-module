@@ -37,6 +37,14 @@ public class PagingVo implements Serializable {
     }
 
     /**
+     * Set limit and return this object
+     */
+    public PagingVo ofLimit(int limit) {
+        this.limit = limit;
+        return this;
+    }
+
+    /**
      * Set total and return this object
      */
     public PagingVo ofTotal(long total) {
