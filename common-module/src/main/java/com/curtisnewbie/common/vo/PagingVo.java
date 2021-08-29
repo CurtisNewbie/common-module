@@ -60,6 +60,15 @@ public class PagingVo implements Serializable {
         return this;
     }
 
+    /**
+     * Increment page number
+     */
+    public void nextPage() {
+        if (this.page == null)
+            throw new IllegalStateException("this.page == null");
+        ++this.page;
+    }
+
     @Override
     public String toString() {
         return "PagingVo{" +
