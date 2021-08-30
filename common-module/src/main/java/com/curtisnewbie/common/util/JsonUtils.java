@@ -2,6 +2,7 @@ package com.curtisnewbie.common.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 
 import java.util.TimeZone;
@@ -13,14 +14,7 @@ import java.util.TimeZone;
  */
 public final class JsonUtils {
 
-    private static final JsonMapper jsonMapper;
-
-    static {
-        JsonMapper jm = new JsonMapper();
-        jm.setTimeZone(TimeZone.getDefault());
-        jm.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        jsonMapper = jm;
-    }
+    private static final JsonMapper jsonMapper = constructsJsonMapper();
 
     private JsonUtils() {
 
@@ -45,6 +39,20 @@ public final class JsonUtils {
      */
     public static <T> T readValueAsObject(String json, Class<T> clz) throws JsonProcessingException {
         return jsonMapper.readValue(json, clz);
+    }
+
+    /**
+     * Construct JavaType
+     */
+    public static JavaType constructType(Class<?> clz) {
+        return jsonMapper.constructType(clz);
+    }
+
+    public static JsonMapper constructsJsonMapper() {
+        JsonMapper jm = new JsonMapper();
+        jm.setTimeZone(TimeZone.getDefault());
+        jm.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        return jm;
     }
 
 }
