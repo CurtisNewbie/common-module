@@ -10,4 +10,4 @@ This project depends on the following modules that you must manually install (us
     - description: BOM file for dependency management
     - url: https://github.com/CurtisNewbie/curtisnewbie-bom
     - branch: main
-    - version: micro-0.0.1 (under `/microservce` folder)
+    - under `/microservice` folder
