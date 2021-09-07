@@ -7,7 +7,7 @@ import lombok.Data;
  * A pageable value object with a single payload object
  * </p>
  * <p>
- * Convenient payload wrapper that needs {@link PagingVo}
+ * Convenient payload wrapper for VO that needs {@link PagingVo}
  * </p>
  *
  * @author yongjie.zhuang
