@@ -73,7 +73,7 @@ public final class BeanCopyUtils {
      * @param targetType  targetType
      * @param <T>         target's generic type
      * @param <V>         source's generic type
-     * @return targetObject pageinfo (wherein each object is created using default constructor)
+     * @return pageInfo of targetType
      */
     public static <T, V> PageInfo<V> toPageList(PageInfo<T> srcPageInfo, Class<V> targetType) {
         Objects.requireNonNull(targetType);
@@ -83,6 +83,28 @@ public final class BeanCopyUtils {
         PageInfo<V> vPage = PageInfo.of(toTypeList(srcPageInfo.getList(), targetType));
         vPage.setTotal(srcPageInfo.getTotal());
         return vPage;
+    }
+
+    /**
+     * Copy properties of beans in list , convert them to the given type, and wrap returned list with a {@link
+     * PageInfo}
+     * <p>
+     * This is a convenient method that works just like below:
+     * </p>
+     * <pre>
+     * PageInfo<Demo> pi = PageInfo.of(demoService.getDemos(...));
+     * return BeanCopyUtils.toPageList(pi, Demo.class);
+     * </pre>
+     *
+     * @param srcList    source object list
+     * @param targetType targetType
+     * @param <T>        target's generic type
+     * @param <V>        source's generic type
+     * @return pageInfo of targetType
+     */
+    public static <T, V> PageInfo<V> pageInfoOf(List<T> srcList, Class<V> targetType) {
+        PageInfo<T> tp = PageInfo.of(srcList);
+        return toPageList(tp, targetType);
     }
 
 }
