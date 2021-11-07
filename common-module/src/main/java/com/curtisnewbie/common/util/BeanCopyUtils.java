@@ -75,6 +75,7 @@ public final class BeanCopyUtils {
      * @param <V>         source's generic type
      * @return pageInfo of targetType
      */
+    @Deprecated
     public static <T, V> PageInfo<V> toPageList(PageInfo<T> srcPageInfo, Class<V> targetType) {
         Objects.requireNonNull(targetType);
         if (srcPageInfo == null) {
@@ -102,6 +103,7 @@ public final class BeanCopyUtils {
      * @param <V>        source's generic type
      * @return pageInfo of targetType
      */
+    @Deprecated
     public static <T, V> PageInfo<V> pageInfoOf(List<T> srcList, Class<V> targetType) {
         PageInfo<T> tp = PageInfo.of(srcList);
         return toPageList(tp, targetType);
