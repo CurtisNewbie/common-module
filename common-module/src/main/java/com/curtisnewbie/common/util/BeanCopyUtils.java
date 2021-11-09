@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -107,6 +108,18 @@ public final class BeanCopyUtils {
     public static <T, V> PageInfo<V> pageInfoOf(List<T> srcList, Class<V> targetType) {
         PageInfo<T> tp = PageInfo.of(srcList);
         return toPageList(tp, targetType);
+    }
+
+    /**
+     * Map list of T to list of V using the given convert Function
+     *
+     * @param ts        list of T
+     * @param converter function that converts T to V
+     * @param <T>       source type
+     * @param <V>       target type
+     */
+    public static <T, V> List<V> mapTo(List<T> ts, Function<T, V> converter) {
+        return ts.stream().map(converter::apply).collect(Collectors.toList());
     }
 
 }
