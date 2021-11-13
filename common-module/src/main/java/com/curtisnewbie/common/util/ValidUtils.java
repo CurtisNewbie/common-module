@@ -77,4 +77,12 @@ public final class ValidUtils {
         if (result != true)
             throw new MsgEmbeddedException(errMsg);
     }
+
+    public static void inBetween(int val, int start, int end, String errMsg) throws MsgEmbeddedException {
+        assertTrue(val >= start && val <= end, errMsg);
+    }
+
+    public static void inBetween(long val, long start, long end, String errMsg) throws MsgEmbeddedException {
+        assertTrue(val >= start && val <= end, errMsg);
+    }
 }
