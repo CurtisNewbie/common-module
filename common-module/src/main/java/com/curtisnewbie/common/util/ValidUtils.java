@@ -72,4 +72,9 @@ public final class ValidUtils {
             throw new MsgEmbeddedException(errMsg);
         }
     }
+
+    public static void assertTrue(boolean result, String errMsg) throws MsgEmbeddedException {
+        if (result != true)
+            throw new MsgEmbeddedException(errMsg);
+    }
 }
