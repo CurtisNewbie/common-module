@@ -4,10 +4,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.PagingVo;
-import com.github.pagehelper.PageInfo;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -19,16 +17,6 @@ import java.util.stream.Collectors;
 public final class PagingUtil {
 
     private PagingUtil() {
-    }
-
-    /**
-     * Convenient method for creating PageInfo wherein the total number of elements is manually specified
-     */
-    @Deprecated
-    public static <T> PageInfo<T> pageInfoOf(List<T> list, long total) {
-        PageInfo<T> p = PageInfo.of(list);
-        p.setTotal(total);
-        return p;
     }
 
     /**

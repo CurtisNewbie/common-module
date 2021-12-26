@@ -1,6 +1,5 @@
 package com.curtisnewbie.common.vo;
 
-import com.github.pagehelper.PageInfo;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -49,22 +48,6 @@ public class PagingVo implements Serializable {
      */
     public PagingVo ofTotal(long total) {
         this.total = total;
-        return this;
-    }
-
-    /**
-     * Set total and return this object
-     */
-    public PagingVo ofPageInfoTotal(PageInfo<?> pi){
-        this.total = pi.getTotal();
-        return this;
-    }
-
-    /**
-     * Set total and return this object
-     */
-    public PagingVo ofTotal(PageInfo<?> pi) {
-        this.total = pi.getTotal();
         return this;
     }
 
