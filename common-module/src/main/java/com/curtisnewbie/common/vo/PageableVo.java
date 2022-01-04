@@ -23,6 +23,6 @@ public class PageableVo implements Serializable {
      * </p>
      */
     @JsonProperty(value = "pagingVo")
-    private PagingVo pagingVo;
+    private PagingVo pagingVo = new PagingVo();
 
 }
