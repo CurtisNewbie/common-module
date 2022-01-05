@@ -1,6 +1,7 @@
 package com.curtisnewbie.common.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.util.Assert;
 
 import java.io.Serializable;
 
@@ -55,6 +56,14 @@ public class Result<T> implements Serializable {
     @JsonIgnore
     public boolean isOk() {
         return !hasError;
+    }
+
+    /**
+     * Assert {@link #isOk()}, throw exception if it's not
+     */
+    @JsonIgnore
+    public void assertIsOk() {
+        Assert.isTrue(isOk(), msg);
     }
 
     public boolean hasError() {
