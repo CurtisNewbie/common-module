@@ -1,5 +1,7 @@
 package com.curtisnewbie.common.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 
 /**
@@ -48,6 +50,11 @@ public class Result<T> implements Serializable {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    @JsonIgnore
+    public boolean isOk() {
+        return !hasError;
     }
 
     public boolean hasError() {
