@@ -50,7 +50,7 @@ public class Result<T> implements Serializable {
         this.msg = msg;
     }
 
-    public boolean isHasError() {
+    public boolean hasError() {
         return hasError;
     }
 
