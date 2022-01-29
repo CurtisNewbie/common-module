@@ -1,9 +1,11 @@
 package com.curtisnewbie.common.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.function.Consumer;
 
 /**
  * Vo that is pageable
@@ -14,7 +16,7 @@ import java.io.Serializable;
  * @author yongjie.zhuang
  */
 @Data
-public class PageableVo implements Serializable {
+public class PageableVo<T> implements Serializable {
 
     /**
      * Paging info
@@ -24,5 +26,31 @@ public class PageableVo implements Serializable {
      */
     @JsonProperty(value = "pagingVo")
     private PagingVo pagingVo = new PagingVo();
+
+    /**
+     * Nullable Payload
+     * <p>
+     * it's always serialized or deserialized using the name 'data'
+     * </p>
+     */
+    @JsonProperty(value = "data")
+    private T data = null;
+
+    /**
+     * Check whether data is present
+     */
+    @JsonIgnore
+    public boolean isDataPresent() {
+        return data != null;
+    }
+
+    /**
+     * Consumer invoked when data is present
+     */
+    @JsonIgnore
+    public void onDataPresent(Consumer<T> consumer) {
+        if (isDataPresent())
+            consumer.accept(data);
+    }
 
 }
