@@ -3,6 +3,7 @@ package com.curtisnewbie.common.vo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import org.springframework.util.Assert;
 
 import java.io.Serializable;
 import java.util.function.Consumer;
@@ -30,10 +31,10 @@ public class PageableVo<T> implements Serializable {
     /**
      * Nullable Payload
      * <p>
-     * it's always serialized or deserialized using the name 'data'
+     * it's always serialized or deserialized using the name 'payload' (for backward compatibility)
      * </p>
      */
-    @JsonProperty(value = "data")
+    @JsonProperty(value = "payload")
     private T data = null;
 
     /**
@@ -49,8 +50,19 @@ public class PageableVo<T> implements Serializable {
      */
     @JsonIgnore
     public void onDataPresent(Consumer<T> consumer) {
+        Assert.notNull(consumer, "consumer == null");
         if (isDataPresent())
             consumer.accept(data);
     }
+
+    /**
+     * Consumer invoked when data is absent
+     */
+    @JsonIgnore
+    public void onDataNotPresent(Runnable r) {
+        if (!isDataPresent() && r != null)
+            r.run();
+    }
+
 
 }
