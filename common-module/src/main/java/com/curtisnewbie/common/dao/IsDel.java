@@ -7,6 +7,13 @@ import org.springframework.util.Assert;
 
 /**
  * is_del flag
+ * <p>
+ * Make sure you have following configuration:
+ * </p>
+ * <pre>
+ * mybatis-plus:
+ *     typeEnumsPackage:  com.curtisnewbie.common.dao
+ * </pre>
  *
  * @author yongjie.zhuang
  * @see IsDelSerializer
@@ -29,9 +36,8 @@ public enum IsDel {
         this.value = value;
     }
 
-    public static boolean isDeleted(IsDel isDel) {
-        Assert.notNull(isDel, "isDel == null");
-        return isDel == NORMAL;
+    public boolean isDeleted() {
+        return this == DELETED;
     }
 }
 

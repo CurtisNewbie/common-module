@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
+import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 
@@ -36,10 +37,17 @@ public class DaoSkeleton {
     @TableField("update_by")
     private String updateBy;
 
-    /**
-     * whether current record is deleted
-     */
+    /** whether current record is deleted */
     @TableField("is_del")
     private IsDel isDel;
 
+    /**
+     * Check if current record is deleted
+     *
+     * @throws IllegalArgumentException if {@code isDel == null}
+     */
+    public boolean isDeleted() {
+        Assert.notNull(isDel, "isDel == null");
+        return isDel.isDeleted();
+    }
 }
