@@ -1,6 +1,7 @@
 package com.curtisnewbie.common.dao;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import org.springframework.util.Assert;
@@ -38,6 +39,18 @@ public enum IsDel {
 
     public boolean isDeleted() {
         return this == DELETED;
+    }
+
+    @JsonCreator
+    public static IsDel from(Integer n) {
+        if (n == null) return null;
+
+        final int v = n;
+        for (IsDel e : IsDel.values())
+            if (e.getValue() == v)
+                return e;
+
+        return null;
     }
 }
 
