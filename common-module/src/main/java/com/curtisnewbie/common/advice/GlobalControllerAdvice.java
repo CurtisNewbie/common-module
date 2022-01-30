@@ -25,12 +25,6 @@ public class GlobalControllerAdvice {
         return Result.error("Unknown error, please try again later");
     }
 
-    @ExceptionHandler({AccessDeniedException.class})
-    @ResponseBody
-    public Result<?> handleAccessDeniedException(Exception e) {
-        return Result.error("Operation not allowed");
-    }
-
     @ExceptionHandler({MsgEmbeddedException.class})
     @ResponseBody
     public Result<?> handleMsgEmbeddedException(MsgEmbeddedException e) {
