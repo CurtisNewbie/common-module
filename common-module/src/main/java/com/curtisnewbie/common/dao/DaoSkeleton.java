@@ -3,6 +3,7 @@ package com.curtisnewbie.common.dao;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -34,4 +35,11 @@ public class DaoSkeleton {
     /** who updated this record */
     @TableField("update_by")
     private String updateBy;
+
+    /**
+     * whether current record is deleted
+     */
+    @TableField("is_del")
+    private IsDel isDel;
+
 }
