@@ -1,6 +1,9 @@
 package com.curtisnewbie.common.dao;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
@@ -9,7 +12,12 @@ import java.time.LocalDateTime;
  *
  * @author yongjie.zhuang
  */
+@Data
 public class DaoSkeleton {
+
+    /** primary key */
+    @TableId(type = IdType.AUTO)
+    private Integer id;
 
     /** when the record is created */
     @TableField("create_time")
