@@ -1,5 +1,7 @@
 package com.curtisnewbie.common.vo;
 
+import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
+import com.curtisnewbie.common.exceptions.UnrecoverableMsgEmbeddedException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.util.Assert;
 
@@ -60,10 +62,13 @@ public class Result<T> implements Serializable {
 
     /**
      * Assert {@link #isOk()}, throw exception if it's not
+     *
+     * @throws UnrecoverableMsgEmbeddedException
      */
     @JsonIgnore
     public void assertIsOk() {
-        Assert.isTrue(isOk(), msg);
+        if (!isOk())
+            throw new UnrecoverableMsgEmbeddedException(msg);
     }
 
     public boolean hasError() {

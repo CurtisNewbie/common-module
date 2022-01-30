@@ -11,23 +11,20 @@ public class UnrecoverableMsgEmbeddedException extends RuntimeException {
     /**
      * Custom Message for this exception
      */
-    private String msg;
+    private String embeddedMsg;
 
-    /**
-     * @param msg message that can be both shown in stacktrace and later retrieved by getter/setter
-     */
     public UnrecoverableMsgEmbeddedException(String msg) {
         super(msg);
-        this.msg = msg;
+        this.embeddedMsg = msg;
     }
 
     /**
-     * @param msg message that can be both shown in stacktrace and later retrieved by getter/setter
-     * @param e   cause
+     * @param embeddedMsg message that can be both shown in stacktrace and later retrieved by getter/setter
+     * @param e          cause
      */
-    public UnrecoverableMsgEmbeddedException(String msg, Throwable e) {
-        super(msg, e);
-        this.msg = msg;
+    public UnrecoverableMsgEmbeddedException(String embeddedMsg, Throwable e) {
+        super(embeddedMsg, e);
+        this.embeddedMsg = embeddedMsg;
     }
 
     /**
@@ -37,18 +34,18 @@ public class UnrecoverableMsgEmbeddedException extends RuntimeException {
      */
     public UnrecoverableMsgEmbeddedException(String msgInStacktrace, String customMsg, Throwable e) {
         super(msgInStacktrace, e);
-        this.msg = customMsg;
+        this.embeddedMsg = customMsg;
     }
 
     public UnrecoverableMsgEmbeddedException() {
 
     }
 
-    public String getMsg() {
-        return msg;
+    public String getEmbeddedMsg() {
+        return embeddedMsg;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public void setEmbeddedMsg(String embeddedMsg) {
+        this.embeddedMsg = embeddedMsg;
     }
 }
