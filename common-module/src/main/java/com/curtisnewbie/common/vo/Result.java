@@ -1,9 +1,7 @@
 package com.curtisnewbie.common.vo;
 
-import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
 import com.curtisnewbie.common.exceptions.UnrecoverableMsgEmbeddedException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.util.Assert;
 
 import java.io.Serializable;
 
