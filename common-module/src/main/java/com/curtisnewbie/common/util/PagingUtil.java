@@ -78,6 +78,26 @@ public final class PagingUtil {
     }
 
     /**
+     * Convert PageableVo with given converter
+     */
+    public static <T, V> PageableVo<List<V>> convert(PageableVo<List<T>> srcPv, Function<T, V> converter) {
+        if (srcPv == null) {
+            return new PageableVo();
+        }
+        final PageableVo<List<V>> p = new PageableVo<>();
+        p.setPagingVo(srcPv.getPagingVo());
+        if (srcPv.getData() != null) {
+            p.setData(
+                    srcPv.getData()
+                            .stream()
+                            .map(converter::apply)
+                            .collect(Collectors.toList())
+            );
+        }
+        return p;
+    }
+
+    /**
      * Construct {@link Page} parameter
      *
      * @param pageNum current page
