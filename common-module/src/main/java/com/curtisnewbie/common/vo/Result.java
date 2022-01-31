@@ -2,6 +2,7 @@ package com.curtisnewbie.common.vo;
 
 import com.curtisnewbie.common.exceptions.UnrecoverableMsgEmbeddedException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 
 import java.io.Serializable;
 
@@ -10,6 +11,7 @@ import java.io.Serializable;
  *
  * @author yongjie.zhuang
  */
+@Data
 public class Result<T> implements Serializable {
 
     /** message being returned */
