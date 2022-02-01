@@ -1,6 +1,6 @@
 package com.curtisnewbie.common.vo;
 
-import com.curtisnewbie.common.exceptions.UnrecoverableMsgEmbeddedException;
+import com.curtisnewbie.common.exceptions.UnrecoverableException;
 import com.curtisnewbie.common.util.AssertUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -15,9 +15,16 @@ import java.io.Serializable;
 @Data
 public class Result<T> implements Serializable {
 
+    /** Error code */
+    private String errorCode;
+
     /** message being returned */
     private String msg;
 
+    /** whether current response has an error */
+    private boolean error;
+
+    @Deprecated // todo change to error, so that we don't have a setter method called 'setHasError' :(
     /** whether current response has an error */
     private boolean hasError;
 
@@ -27,6 +34,7 @@ public class Result<T> implements Serializable {
     public static <T> Result<T> ok() {
         Result<T> resp = new Result<T>();
         resp.hasError = false;
+        resp.error = false;
         resp.msg = "";
         resp.data = null;
         return resp;
@@ -35,6 +43,7 @@ public class Result<T> implements Serializable {
     public static <T> Result<T> of(T data) {
         Result<T> resp = new Result<T>();
         resp.hasError = false;
+        resp.error = false;
         resp.msg = null;
         resp.data = data;
         return resp;
@@ -43,6 +52,7 @@ public class Result<T> implements Serializable {
     public static <T> Result<T> error(String errMsg) {
         Result<T> resp = new Result<T>();
         resp.hasError = true;
+        resp.error = true;
         resp.msg = errMsg;
         resp.data = null;
         return resp;
@@ -58,17 +68,17 @@ public class Result<T> implements Serializable {
 
     @JsonIgnore
     public boolean isOk() {
-        return !hasError;
+        return !isError();
     }
 
     /**
      * Assert {@link #isOk()}, throw exception if it's not
      *
-     * @throws UnrecoverableMsgEmbeddedException
+     * @throws UnrecoverableException
      */
     @JsonIgnore
     public void assertIsOk() {
-        AssertUtils.isTrue(isOk(), msg);
+        AssertUtils.isTrue(isOk(), msg, errorCode);
     }
 
     public boolean hasError() {
@@ -87,12 +97,4 @@ public class Result<T> implements Serializable {
         this.data = data;
     }
 
-    @Override
-    public String toString() {
-        return "Result{" +
-                "msg='" + msg + '\'' +
-                ", hasError=" + hasError +
-                ", data=" + data +
-                '}';
-    }
 }

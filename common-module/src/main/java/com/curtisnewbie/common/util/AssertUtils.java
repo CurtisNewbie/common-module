@@ -1,7 +1,7 @@
 package com.curtisnewbie.common.util;
 
 
-import com.curtisnewbie.common.exceptions.UnrecoverableMsgEmbeddedException;
+import com.curtisnewbie.common.exceptions.UnrecoverableException;
 import org.springframework.util.StringUtils;
 
 import java.util.Collection;
@@ -10,8 +10,7 @@ import java.util.Objects;
 /**
  * Utility class for assertion
  * <p>
- * For condition that does not match the rule, a {@link com.curtisnewbie.common.exceptions.UnrecoverableMsgEmbeddedException}
- * is thrown
+ * For condition that does not match the rule, a {@link UnrecoverableException} is thrown
  * </p>
  * <p>
  * Almost the same as {@link ValidUtils}, except that the {@link RuntimeException} is used
@@ -25,6 +24,14 @@ public final class AssertUtils {
 
     private AssertUtils() {
 
+    }
+
+    /**
+     * Assert array not null or empty
+     */
+    public static <T> void notEmpty(T[] c, String msg, String errCode) {
+        nonNull(c, msg, errCode);
+        isFalse(c.length == 0, msg, errCode);
     }
 
     /**
@@ -61,9 +68,14 @@ public final class AssertUtils {
      * Assert has text
      */
     public static void hasText(String text, String errMsg) {
-        if (!StringUtils.hasText(text)) {
-            throw new UnrecoverableMsgEmbeddedException(errMsg);
-        }
+        isTrue(StringUtils.hasText(text), errMsg);
+    }
+
+    /**
+     * Assert has text
+     */
+    public static void hasText(String text, String errMsg, String errCode) {
+        isTrue(StringUtils.hasText(text), errMsg, errCode);
     }
 
     /**
@@ -81,10 +93,25 @@ public final class AssertUtils {
     }
 
     /**
+     * Assert not null
+     */
+    public static <T> void nonNull(T t, String errMsg, String errCode) {
+        isFalse(t == null, errMsg, errCode);
+    }
+
+
+    /**
      * Assert equals
      */
     public static <T, V> void equals(T t, V v, String errMsg) {
         isTrue(Objects.equals(t, v), errMsg);
+    }
+
+    /**
+     * Assert equals
+     */
+    public static <T, V> void equals(T t, V v, String errMsg, String errCode) {
+        isTrue(Objects.equals(t, v), errMsg, errCode);
     }
 
     /**
@@ -95,19 +122,38 @@ public final class AssertUtils {
     }
 
     /**
+     * Assert not equals
+     */
+    public static <T, V> void notEquals(T t, V v, String errMsg, String errCode) {
+        isFalse(Objects.equals(t, v), errMsg, errCode);
+    }
+
+    /**
+     * Assert is true
+     */
+    public static void isTrue(boolean result, String errMsg, String errCode) {
+        if (!result) throw new UnrecoverableException(errMsg, errCode);
+    }
+
+    /**
      * Assert is true
      */
     public static void isTrue(boolean result, String errMsg) {
-        if (!result)
-            throw new UnrecoverableMsgEmbeddedException(errMsg);
+        if (!result) throw new UnrecoverableException(errMsg);
+    }
+
+    /**
+     * Assert is false
+     */
+    public static void isFalse(boolean result, String errMsg, String errCode) {
+        if (result) throw new UnrecoverableException(errMsg, errCode);
     }
 
     /**
      * Assert is false
      */
     public static void isFalse(boolean result, String errMsg) {
-        if (result)
-            throw new UnrecoverableMsgEmbeddedException(errMsg);
+        if (result) throw new UnrecoverableException(errMsg);
     }
 
     /**
@@ -118,6 +164,13 @@ public final class AssertUtils {
     }
 
     /**
+     * Assert value in between start and end
+     */
+    public static void inBetween(int val, int start, int end, String errMsg, String errCode) {
+        isTrue(val >= start && val <= end, errMsg, errCode);
+    }
+
+    /**
      * Assert value in between start (inclusive) and end (inclusive)
      */
     public static void inBetween(long val, long start, long end, String errMsg) {
@@ -125,9 +178,37 @@ public final class AssertUtils {
     }
 
     /**
+     * Assert value in between start (inclusive) and end (inclusive)
+     */
+    public static void inBetween(long val, long start, long end, String errMsg, String errCode) {
+        isTrue(val >= start && val <= end, errMsg, errCode);
+    }
+
+    /**
      * Assert value not in between start and end
      */
     public static void notInBetween(long val, long start, long end, String errMsg) {
         isTrue(val < start || val > end, errMsg);
+    }
+
+    /**
+     * Assert value not in between start and end
+     */
+    public static void notInBetween(long val, long start, long end, String errMsg, String errCode) {
+        isTrue(val < start || val > end, errMsg, errCode);
+    }
+
+    /**
+     * Assert value not in between start and end
+     */
+    public static void notInBetween(int val, int start, int end, String errMsg) {
+        isTrue(val < start || val > end, errMsg);
+    }
+
+    /**
+     * Assert value not in between start and end
+     */
+    public static void notInBetween(int val, int start, int end, String errMsg, String errCode) {
+        isTrue(val < start || val > end, errMsg, errCode);
     }
 }

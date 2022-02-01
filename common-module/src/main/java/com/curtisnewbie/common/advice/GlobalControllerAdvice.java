@@ -1,14 +1,12 @@
 package com.curtisnewbie.common.advice;
 
 import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
-import com.curtisnewbie.common.exceptions.UnrecoverableMsgEmbeddedException;
+import com.curtisnewbie.common.exceptions.UnrecoverableException;
 import com.curtisnewbie.common.vo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.nio.file.AccessDeniedException;
 
 /**
  * Base Controller Advice
@@ -35,9 +33,9 @@ public class GlobalControllerAdvice {
         return Result.error(errorMsg);
     }
 
-    @ExceptionHandler({UnrecoverableMsgEmbeddedException.class})
+    @ExceptionHandler({UnrecoverableException.class})
     @ResponseBody
-    public Result<?> handleUnrecoverableMsgEmbeddedException(UnrecoverableMsgEmbeddedException e) {
+    public Result<?> handleUnrecoverableMsgEmbeddedException(UnrecoverableException e) {
         log.error("Unrecoverable exception occurred", e);
         String errorMsg = e.getEmbeddedMsg();
         if (!StringUtils.hasText(errorMsg)) {
