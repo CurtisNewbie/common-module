@@ -1,6 +1,7 @@
 package com.curtisnewbie.common.vo;
 
 import com.curtisnewbie.common.exceptions.UnrecoverableMsgEmbeddedException;
+import com.curtisnewbie.common.util.AssertUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
@@ -67,8 +68,7 @@ public class Result<T> implements Serializable {
      */
     @JsonIgnore
     public void assertIsOk() {
-        if (!isOk())
-            throw new UnrecoverableMsgEmbeddedException(msg);
+        AssertUtils.isTrue(isOk(), msg);
     }
 
     public boolean hasError() {
