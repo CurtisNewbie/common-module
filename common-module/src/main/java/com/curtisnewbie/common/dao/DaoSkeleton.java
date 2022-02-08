@@ -3,27 +3,26 @@ package com.curtisnewbie.common.dao;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 
+/*
+  id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT "primary key",
+
+  ...
+
+  create_time DATETIME NOT NULL DEFAULT NOW() COMMENT 'when the record is created',
+  create_by VARCHAR(255) NOT NULL DEFAULT '' COMMENT 'who created this record',
+  update_time DATETIME NOT NULL DEFAULT NOW() COMMENT 'when the record is updated',
+  update_by VARCHAR(255) NOT NULL DEFAULT '' COMMENT 'who updated this record',
+  is_del TINYINT NOT NULL DEFAULT '0' COMMENT '0-normal, 1-deleted',
+
+ */
+
 /**
  * Base class for DAO object, contains commonly used table field
- * <pre>
- * {@code
- *
- * id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT "primary key",
- *
- * ...
- *
- * create_time DATETIME DEFAULT NOW() COMMENT 'when the record is created',
- * create_by VARCHAR(255) COMMENT 'who created this record',
- * update_time DATETIME COMMENT 'when the record is updated',
- * update_by VARCHAR(255) COMMENT 'who updated this record'
- * }
- * </pre>
  *
  * @author yongjie.zhuang
  */
