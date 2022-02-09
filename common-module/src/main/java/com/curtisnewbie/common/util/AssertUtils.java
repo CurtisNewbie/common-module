@@ -100,6 +100,26 @@ public final class AssertUtils {
         isFalse(t == null, errMsg, errCode);
     }
 
+    /**
+     * Assert is null
+     */
+    public static <T> void isNull(T t) {
+        isTrue(t == null, DEFAULT_ILLEGAL_PARAMETERS_MSG);
+    }
+
+    /**
+     * Assert is null
+     */
+    public static <T> void isNull(T t, String errMsg) {
+        isTrue(t == null, errMsg);
+    }
+
+    /**
+     * Assert is null
+     */
+    public static <T> void isNull(T t, String errMsg, String errCode) {
+        isTrue(t == null, errMsg, errCode);
+    }
 
     /**
      * Assert equals
