@@ -21,6 +21,7 @@ import java.util.Objects;
 public final class AssertUtils {
 
     private static final String DEFAULT_NON_NULL_OR_EMPTY_MSG = "Required parameters cannot be null or empty";
+    private static final String DEFAULT_ILLEGAL_PARAMETERS_MSG = "Invalid parameters";
 
     private AssertUtils() {
 
@@ -112,6 +113,69 @@ public final class AssertUtils {
      */
     public static <T, V> void equals(T t, V v, String errMsg, String errCode) {
         isTrue(Objects.equals(t, v), errMsg, errCode);
+    }
+
+    /**
+     * Assert equals
+     */
+    public static <T, V> void equals(short t, short v, String errMsg, String errCode) {
+        isTrue(t == v, errMsg, errCode);
+    }
+
+    /**
+     * Assert equals
+     */
+    public static <T, V> void equals(short t, short v, String errMsg) {
+        isTrue(t == v, errMsg);
+    }
+
+    /**
+     * Assert equals
+     */
+    public static <T, V> void equals(short t, short v) {
+        equals(t, v, DEFAULT_ILLEGAL_PARAMETERS_MSG);
+    }
+
+    /**
+     * Assert equals
+     */
+    public static <T, V> void equals(int t, int v, String errMsg, String errCode) {
+        isTrue(t == v, errMsg, errCode);
+    }
+
+    /**
+     * Assert equals
+     */
+    public static <T, V> void equals(int t, int v, String errMsg) {
+        isTrue(t == v, errMsg);
+    }
+
+    /**
+     * Assert equals
+     */
+    public static <T, V> void equals(int t, int v) {
+        equals(t, v, DEFAULT_ILLEGAL_PARAMETERS_MSG);
+    }
+
+    /**
+     * Assert equals
+     */
+    public static <T, V> void equals(long t, long v) {
+        equals(t, v, DEFAULT_ILLEGAL_PARAMETERS_MSG);
+    }
+
+    /**
+     * Assert equals
+     */
+    public static <T, V> void equals(long t, long v, String errMsg) {
+        isTrue(t == v, errMsg);
+    }
+
+    /**
+     * Assert equals
+     */
+    public static <T, V> void equals(long t, long v, String errMsg, String errCode) {
+        isTrue(t == v, errMsg, errCode);
     }
 
     /**
