@@ -124,14 +124,14 @@ public final class AssertUtils {
     /**
      * Assert equals
      */
-    public static <T, V> void equals(T t, V v, String errMsg) {
+    public static <T> void equals(T t, T v, String errMsg) {
         isTrue(Objects.equals(t, v), errMsg);
     }
 
     /**
      * Assert equals
      */
-    public static <T, V> void equals(T t, V v, String errMsg, String errCode) {
+    public static <T> void equals(T t, T v, String errMsg, String errCode) {
         isTrue(Objects.equals(t, v), errMsg, errCode);
     }
 
