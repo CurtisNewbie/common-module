@@ -70,6 +70,9 @@ public final class Retry {
 
     /**
      * Builder for Retry
+     * <p>
+     * Must call {@link #start()} to actually start the operation
+     * </p>
      */
     public static class Builder {
         private final Retry retry;
@@ -80,20 +83,32 @@ public final class Retry {
             this.retry = new Retry(r);
         }
 
+        /**
+         * Maximum retry times
+         */
         public Builder retryTimes(int retryTimes) {
             this.retryTimes = retryTimes;
             return this;
         }
 
+        /**
+         * Only retry once
+         */
         public Builder retryOnce() {
             return retryTimes(1);
         }
 
+        /**
+         * Consumer for exception
+         */
         public Builder onException(Consumer<Exception> onException) {
             this.onException = onException;
             return this;
         }
 
+        /**
+         * Start the internal {@code Retry}
+         */
         public void start() {
             retry.retryOnException(onException, retryTimes);
         }
