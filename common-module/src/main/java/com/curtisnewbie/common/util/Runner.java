@@ -16,7 +16,7 @@ public final class Runner {
     /**
      * Run the Runnable safely
      */
-    public static void runSafely(final Runnable r, final Consumer<Exception> consumer) {
+    public static void runSafely(final ThrowableRunnable r, final Consumer<Exception> consumer) {
         if (r == null)
             return;
 
@@ -31,7 +31,7 @@ public final class Runner {
     /**
      * Run the Runnable safely, the exception is muted
      */
-    public static void runSafely(final Runnable r) {
+    public static void runSafely(final ThrowableRunnable r) {
         runSafely(r, null);
     }
 
