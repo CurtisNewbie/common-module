@@ -1,6 +1,7 @@
 package com.curtisnewbie.common.util;
 
 import lombok.*;
+import lombok.extern.slf4j.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.*;
  *
  * @author yongj.zhuang
  */
+@Slf4j
 public class ObjectDiffTest {
 
     @Test
@@ -16,16 +18,29 @@ public class ObjectDiffTest {
         origin.setAge(13);
         origin.setName("fake dummy");
         origin.setType(Type.FAKE);
+        origin.setDesc("yoyo");
+        log.info("origin: {}", origin);
 
         Dummy updated = new Dummy();
         updated.setType(Type.REAL);
         updated.setName("real dummy");
+        updated.setDesc("yoyo");
+        log.info("updated: {}", updated);
 
-        ObjectDiff.from(updated).applyDiffTo(origin);
+        final ObjectDiff<Dummy> objectDiff = ObjectDiff.from(updated);
+        objectDiff.diff(origin);
 
-        Assertions.assertEquals(origin.getAge(), 13);
-        Assertions.assertEquals(origin.getName(), "real dummy");
-        Assertions.assertEquals(origin.getType(), Type.REAL);
+        Assertions.assertTrue(objectDiff.checkFieldDiff("type").isDifferent());
+        Assertions.assertTrue(objectDiff.checkFieldDiff("name").isDifferent());
+        Assertions.assertFalse(objectDiff.checkFieldDiff("age").isDifferent());
+        Assertions.assertFalse(objectDiff.checkFieldDiff("desc").isDifferent());
+
+        objectDiff.applyDiffTo(origin);
+        log.info("applied: {}", origin);
+
+        Assertions.assertEquals(13, origin.getAge());
+        Assertions.assertEquals("real dummy", origin.getName());
+        Assertions.assertEquals(Type.REAL, origin.getType());
     }
 
     @Data
@@ -33,6 +48,7 @@ public class ObjectDiffTest {
         private Integer age;
         private String name;
         private Type type;
+        private String desc;
     }
 
     private enum Type {
