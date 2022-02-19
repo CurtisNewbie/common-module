@@ -36,8 +36,8 @@ public final class OptionalUtils {
      * Consume value from Optional, convert and return it
      *
      * @param opt          optional
-     * @param converter converter
-     * @param defaultValue called to supply value if Optional is not present
+     * @param converter    converter
+     * @param defaultValue default value
      */
     public static <T, V> V getAndConvert(final Optional<T> opt, final Function<T, V> converter, final V defaultValue) {
         Assert.notNull(opt, "optional == null");
@@ -51,14 +51,24 @@ public final class OptionalUtils {
     }
 
     /**
-     * Consume nullable value, convert and return it
+     * Get nullable value, convert and return it, if the value is null then the default value is returned instead
      *
      * @param nullableValue nullable value
-     * @param converter converter
-     * @param defaultValue  called to supply value if the value is null
+     * @param converter     converter
+     * @param defaultValue  default value
      */
     public static <T, V> V getNullableAndConvert(final T nullableValue, final Function<T, V> converter, final V defaultValue) {
         return getAndConvert(Optional.ofNullable(nullableValue), converter, defaultValue);
+    }
+
+    /**
+     * Get nullable value, a default value is returned if the value is actually null
+     *
+     * @param nullableValue nullable value
+     * @param defaultValue  default value
+     */
+    public static <T> T getNullable(final T nullableValue, final T defaultValue) {
+        return Optional.ofNullable(nullableValue).orElse(defaultValue);
     }
 
 }
