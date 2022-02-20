@@ -75,6 +75,13 @@ public final class AssertUtils {
     /**
      * Assert has text
      */
+    public static void hasText(String text, String errMsgPattern, Object... args) {
+        isTrue(StringUtils.hasText(text), String.format(errMsgPattern, args));
+    }
+
+    /**
+     * Assert has text
+     */
     public static void hasText(String text, String errMsg, String errCode) {
         isTrue(StringUtils.hasText(text), errMsg, errCode);
     }
@@ -84,6 +91,13 @@ public final class AssertUtils {
      */
     public static <T> void nonNull(T t) {
         nonNull(t, DEFAULT_NON_NULL_OR_EMPTY_MSG);
+    }
+
+    /**
+     * Assert not null
+     */
+    public static <T> void nonNull(T t, String errMsgPattern, Object... args) {
+        isFalse(t == null, String.format(errMsgPattern, args));
     }
 
     /**
