@@ -72,16 +72,22 @@ public class ObjectDiff<T> {
     /**
      * Copy fields with non-null values to {@code to}, inherited fields are not included
      */
-    public void applyDiffTo(@Nullable final T to) {
-        if (from == null || to == null) return;
+    public AppliedDiff applyDiffTo(@Nullable final T to) {
+        if (from == null || to == null)
+            return AppliedDiff.none();
 
         // always compare before we apply any diff
         diff(to);
 
+        AppliedDiff appliedDiff = new AppliedDiff();
+
         // apply fromValue to the field
         for (Map.Entry<String, FieldAndValue> entry : nameToFieldAndValue.entrySet()) {
-            setFieldValue(entry.getValue().getField(), to, entry.getValue().getFromValue());
+            final Field f = entry.getValue().getField();
+            setFieldValue(f, to, entry.getValue().getFromValue());
+            appliedDiff.markAsChanged(f.getName());
         }
+        return appliedDiff;
     }
 
     /**
@@ -112,7 +118,9 @@ public class ObjectDiff<T> {
     /**
      * Compare field between two objects ({@code from} and {@code to}), if a diff is found, it's then recorded in {@code nameToFieldAndValue}
      */
-    private static <T> void diffNonNullField(final Field f, final T from, final T to, final Map<String, FieldAndValue> nameToFieldAndValue, final boolean compareNull) {
+    private static <T> void diffNonNullField(final Field f, final T from, final T to, final Map<String, FieldAndValue> nameToFieldAndValue,
+                                             final boolean compareNull) {
+
         if (Modifier.isFinal(f.getModifiers()) || Modifier.isStatic(f.getModifiers()))
             return;
 
@@ -151,6 +159,31 @@ public class ObjectDiff<T> {
         public static Diff none() {
             return new Diff(false, null, null);
         }
+    }
+
+    @Data
+    public static class AppliedDiff {
+
+        private Set<String> fieldNames = new HashSet<>();
+
+        /** Record which field is changed */
+        private void markAsChanged(String field) {
+            fieldNames.add(field);
+        }
+
+        /** Check whether the field is changed */
+        public boolean isChanged(String field) {
+            return fieldNames.contains(field);
+        }
+
+        public boolean hasAnyChange() {
+            return !fieldNames.isEmpty();
+        }
+
+        public static AppliedDiff none() {
+            return new AppliedDiff();
+        }
+
     }
 
 }
