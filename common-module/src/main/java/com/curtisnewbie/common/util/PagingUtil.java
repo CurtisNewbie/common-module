@@ -76,6 +76,20 @@ public final class PagingUtil {
     }
 
     /**
+     * Wrap result in a {@link com.curtisnewbie.common.vo.PageableVo} which internally contains a
+     * {@link PagingVo}
+     */
+    public static <T, V> PageableVo<List<V>> toPageable(IPage<V> srcPageInfo) {
+        if (srcPageInfo == null) {
+            return new PageableVo();
+        }
+        final PageableVo<List<V>> p = new PageableVo<>();
+        p.setPagingVo(forIPage(srcPageInfo));
+        p.setData(srcPageInfo.getRecords());
+        return p;
+    }
+
+    /**
      * Convert PageableVo with given converter
      */
     public static <T, V> PageableVo<List<V>> convert(PageableVo<List<T>> srcPv, Function<T, V> converter) {
@@ -100,7 +114,6 @@ public final class PagingUtil {
      *
      * @param pageNum current page
      * @param limit   page size
-     * @param <T>
      */
     public static <T> Page<T> forPage(int pageNum, int limit) {
         return new Page(pageNum, limit);
@@ -120,8 +133,7 @@ public final class PagingUtil {
     /**
      * Construct {@link Page} parameter based on give {@link PagingVo}
      *
-     * @param pv  pagingVo
-     * @param <T>
+     * @param pv pagingVo
      */
     public static <T> Page<T> forPage(PagingVo pv) {
         return forPage(pv.getPage(), pv.getLimit());
@@ -130,9 +142,6 @@ public final class PagingUtil {
     /**
      * Same as {@link PagingUtil#toPageable(IPage, Function)}, but different style of coding and potentially better
      * readability (especially if lots of lambda expression are used)
-     *
-     * @param <T>
-     * @param <V>
      */
     public static class PageableVoConstructor<T, V> {
 
