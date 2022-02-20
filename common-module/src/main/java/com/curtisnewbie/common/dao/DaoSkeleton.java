@@ -62,4 +62,20 @@ public class DaoSkeleton {
         Assert.notNull(isDel, "isDel == null");
         return isDel.isDeleted();
     }
+
+    /**
+     * Set createTime to now if absent
+     */
+    public void setCreateTimeIfAbsent() {
+        if (createTime == null)
+            createTime = LocalDateTime.now();
+    }
+
+    /**
+     * Set updateTime to now if absent
+     */
+    public void setUpdateTimeIfAbsent() {
+        if (updateTime == null)
+            updateTime = LocalDateTime.now();
+    }
 }
