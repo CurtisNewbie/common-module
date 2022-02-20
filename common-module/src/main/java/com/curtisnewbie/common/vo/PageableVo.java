@@ -1,5 +1,7 @@
 package com.curtisnewbie.common.vo;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.*;
+import com.curtisnewbie.common.util.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -64,5 +66,12 @@ public class PageableVo<T> implements Serializable {
             r.run();
     }
 
+    /**
+     * Build a {@link Page} using {@link #pagingVo}
+     */
+    @JsonIgnore
+    public Page page() {
+        return PagingUtil.forPage(this.getPagingVo());
+    }
 
 }
