@@ -1,7 +1,7 @@
 package com.curtisnewbie.common.vo;
 
 import com.curtisnewbie.common.exceptions.UnrecoverableException;
-import com.curtisnewbie.common.util.AssertUtils;
+import com.curtisnewbie.common.util.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
@@ -73,12 +73,10 @@ public class Result<T> implements Serializable {
 
     /**
      * Assert {@link #isOk()}, throw exception if it's not
-     *
-     * @throws UnrecoverableException
      */
     @JsonIgnore
     public void assertIsOk() {
-        AssertUtils.isTrue(isOk(), msg, errorCode);
+        AssertUtils.isTrue(isOk(), new DefaultErrorType(errorCode, msg));
     }
 
     public boolean hasError() {
