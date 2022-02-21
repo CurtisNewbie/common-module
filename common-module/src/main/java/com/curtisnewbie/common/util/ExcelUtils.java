@@ -119,6 +119,18 @@ public final class ExcelUtils {
     /**
      * Create a title ({@link #createTitle(Sheet, Row, String, int)}), fill column names (the second row) and then the content
      *
+     * @param sheet    sheet
+     * @param data     content for the rows
+     * @param titleOpt title
+     */
+    public static <T> void createTitleThenFillColNamesAndRows(final Sheet sheet, final Class<T> clazz, final List<T> data,
+                                                              final Optional<String> titleOpt) {
+        createTitleThenFillColNamesAndRows(sheet, clazz, data, 0, titleOpt);
+    }
+
+    /**
+     * Create a title ({@link #createTitle(Sheet, Row, String, int)}), fill column names (the second row) and then the content
+     *
      * @param sheet           sheet
      * @param data            content for the rows
      * @param indexOfFirstRow index of first row
@@ -170,7 +182,7 @@ public final class ExcelUtils {
      * @param indexOfFirstRow index of first row
      */
     public static <T> void fillColNamesAndRows(Sheet sheet, Class<T> clazz, List<T> data, int indexOfFirstRow) {
-        createTitleThenFillColNamesAndRows(sheet, clazz, data, indexOfFirstRow, null);
+        createTitleThenFillColNamesAndRows(sheet, clazz, data, indexOfFirstRow, Optional.empty());
     }
 
     /**
@@ -239,7 +251,9 @@ public final class ExcelUtils {
     @Data
     @AllArgsConstructor
     public static class AnnotatedExcelColumn {
+        /** field */
         private final Field field;
+        /** name of column (being displayed in excel) */
         private final String displayedColumnName;
     }
 }
