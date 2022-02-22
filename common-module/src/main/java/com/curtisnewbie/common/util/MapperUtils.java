@@ -41,10 +41,10 @@ public final class MapperUtils {
     /**
      * Select a record and get id from it
      */
-    public static <T> Integer selectAndMapId(Wrapper<DaoSkeleton> wrapper, BaseMapper<DaoSkeleton> baseMapper) {
+    public static <T extends DaoSkeleton> Integer selectAndMapId(Wrapper<T> wrapper, BaseMapper<T> baseMapper) {
         Assert.notNull(wrapper, "wrapper == null");
 
-        DaoSkeleton t = baseMapper.selectOne(wrapper);
+        T t = baseMapper.selectOne(wrapper);
         if (t == null)
             return null;
 
