@@ -78,4 +78,21 @@ public class DaoSkeleton {
         if (updateTime == null)
             updateTime = LocalDateTime.now();
     }
+
+    /**
+     * set createBy and createTime (if absent)
+     */
+    public void onCreate(String createdBy) {
+        this.setCreateBy(createdBy);
+        setCreateTimeIfAbsent();
+    }
+
+    /**
+     * set updateBy and updateTime (if absent)
+     */
+    public void onUpdate(String updatedBy) {
+        this.setUpdateBy(updatedBy);
+        setUpdateTimeIfAbsent();
+    }
 }
+
