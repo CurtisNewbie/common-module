@@ -17,8 +17,13 @@ public class ExcelContentFillingHelper<T> {
     private List<T> dataList;
     private String title;
 
-    public static ExcelContentFillingHelper helper() {
-        return new ExcelContentFillingHelper();
+    /**
+     * Create new helper for given data class
+     */
+    public static <V> ExcelContentFillingHelper<V> forDataClass(Class<V> dataClazz) {
+        final ExcelContentFillingHelper<V> helper = new ExcelContentFillingHelper<>();
+        helper.dataClazz = dataClazz;
+        return helper;
     }
 
     public ExcelContentFillingHelper<T> setSheet(Sheet sheet) {
@@ -28,11 +33,6 @@ public class ExcelContentFillingHelper<T> {
 
     public ExcelContentFillingHelper<T> setIndexOfFirstRow(int indexOfFirstRow) {
         this.indexOfFirstRow = indexOfFirstRow;
-        return this;
-    }
-
-    public ExcelContentFillingHelper<T> setDataClazz(Class<T> dataClazz) {
-        this.dataClazz = dataClazz;
         return this;
     }
 
