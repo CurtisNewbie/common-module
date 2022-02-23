@@ -22,8 +22,8 @@ public final class LockUtils {
         Assert.notNull(lock, "lock == null");
         Assert.notNull(r, "throwableRunnable == null");
 
+        lock.lock(); // if this throws exception, we didn't get the lock at all, then we don't need to unlock
         try {
-            lock.lock();
             r.run();
         } finally {
             lock.unlock();
@@ -37,8 +37,8 @@ public final class LockUtils {
         Assert.notNull(lock, "lock == null");
         Assert.notNull(r, "runnable == null");
 
+        lock.lock(); // if this throws exception, we didn't get the lock at all, then we don't need to unlock
         try {
-            lock.lock();
             r.run();
         } finally {
             lock.unlock();

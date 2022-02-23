@@ -57,8 +57,8 @@ public class ObjectDiff<T> {
     /**
      * Compare to object {@code to}
      */
-    public void diff(@Nullable final T to) {
-        if (from == null || to == null) return;
+    public ObjectDiff<T> diff(@Nullable final T to) {
+        if (from == null || to == null) return this; // does nothing
 
         // always re-instantiate the map, since we don't know which v it is
         nameToFieldAndValue = new HashMap<>();
@@ -67,6 +67,8 @@ public class ObjectDiff<T> {
         for (final Field f : fields) {
             diffNonNullField(f, from, to, nameToFieldAndValue, compareNull);
         }
+
+        return this; // used for method chaining
     }
 
     /**
@@ -100,6 +102,13 @@ public class ObjectDiff<T> {
 
         final FieldAndValue fieldAndValue = nameToFieldAndValue.get(fieldName);
         return new Diff(true, fieldAndValue.getFromValue(), fieldAndValue.getToValue());
+    }
+
+    /**
+     * Has any difference between the two, call {@link #diff(Object)} at least once before calling this method, or else we have nothing to compare with
+     */
+    public boolean hasAnyDiff() {
+        return !nameToFieldAndValue.isEmpty();
     }
 
     // ---------------------------- private helper method ---------------------
