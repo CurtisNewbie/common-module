@@ -95,7 +95,7 @@ public class ObjectDiff<T> {
     /**
      * Check whether certain field is different, call {@link #diff(Object)} at least once before calling this method, or else we have nothing to compare with
      */
-    public Diff checkFieldDiff(final String fieldName) {
+    public Diff getDiffOnField(final String fieldName) {
         Assert.notNull(nameToFieldAndValue, "Only when #diff method is applied, then #checkFieldDiff method can be called");
         if (!nameToFieldAndValue.containsKey(fieldName))
             return Diff.none();

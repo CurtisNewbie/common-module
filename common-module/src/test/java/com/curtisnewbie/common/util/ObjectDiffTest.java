@@ -30,10 +30,10 @@ public class ObjectDiffTest {
         final ObjectDiff<Dummy> objectDiff = ObjectDiff.from(updated);
         objectDiff.diff(origin);
 
-        Assertions.assertTrue(objectDiff.checkFieldDiff("type").isDifferent());
-        Assertions.assertTrue(objectDiff.checkFieldDiff("name").isDifferent());
-        Assertions.assertFalse(objectDiff.checkFieldDiff("age").isDifferent());
-        Assertions.assertFalse(objectDiff.checkFieldDiff("desc").isDifferent());
+        Assertions.assertTrue(objectDiff.getDiffOnField("type").isDifferent());
+        Assertions.assertTrue(objectDiff.getDiffOnField("name").isDifferent());
+        Assertions.assertFalse(objectDiff.getDiffOnField("age").isDifferent());
+        Assertions.assertFalse(objectDiff.getDiffOnField("desc").isDifferent());
 
         objectDiff.applyDiffTo(origin);
         log.info("applied: {}", origin);
