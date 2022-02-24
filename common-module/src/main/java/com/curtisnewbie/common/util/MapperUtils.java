@@ -29,7 +29,7 @@ public final class MapperUtils {
     }
 
     /**
-     * Select a list of entities and convert it, if the selected record is null, a null value is returned directly without conversion
+     * Select a list of entities and convert it
      */
     public static <T, V> List<V> selectListAndConvert(Wrapper<T> wrapper, BaseMapper<T> baseMapper, Function<T, V> converter) {
         Assert.notNull(wrapper, "wrapper == null");
