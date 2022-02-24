@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.core.mapper.*;
 import com.curtisnewbie.common.dao.*;
 import org.springframework.util.*;
 
+import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 /**
  * Utils for Mapper
@@ -24,6 +26,16 @@ public final class MapperUtils {
         final QueryWrapper<T> w = new QueryWrapper<T>()
                 .eq(column, value);
         return baseMapper.selectOne(w);
+    }
+
+    /**
+     * Select a list of entities and convert it, if the selected record is null, a null value is returned directly without conversion
+     */
+    public static <T, V> List<V> selectListAndConvert(Wrapper<T> wrapper, BaseMapper<T> baseMapper, Function<T, V> converter) {
+        Assert.notNull(wrapper, "wrapper == null");
+        Assert.notNull(converter, "converter == null");
+        List<T> tl = baseMapper.selectList(wrapper);
+        return tl.stream().map(converter::apply).collect(Collectors.toList());
     }
 
     /**
