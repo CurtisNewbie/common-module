@@ -20,6 +20,15 @@ public final class MapperUtils {
     }
 
     /**
+     * Update by a column
+     */
+    public static <T> int updateBy(String column, Object value, BaseMapper<T> baseMapper, T entity) {
+        final QueryWrapper<T> w = new QueryWrapper<T>()
+                .eq(column, value);
+        return baseMapper.update(entity, w);
+    }
+
+    /**
      * Select one by a column
      */
     public static <T> T selectOneBy(String column, Object value, BaseMapper<T> baseMapper) {
