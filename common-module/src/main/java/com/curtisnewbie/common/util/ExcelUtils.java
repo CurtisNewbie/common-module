@@ -8,9 +8,12 @@ import org.springframework.util.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
 import java.util.stream.*;
 
+import static com.curtisnewbie.common.util.AssertUtils.*;
 import static com.curtisnewbie.common.util.OptionalUtils.*;
+import static com.curtisnewbie.common.util.ReflectUtils.*;
 
 /**
  * Excel Utils
@@ -146,7 +149,7 @@ public final class ExcelUtils {
         final IntWrapper rowIndex = new IntWrapper(indexOfFirstRow - 1);
 
         // parse the first object's class using reflection
-        final List<AnnotatedExcelColumn> annotatedExcelColumns = parseFieldNames(clazz);
+        final List<AnnotatedExcelColumn> annotatedExcelColumns = parseExcelFields(clazz);
 
         // create a merged col as the title for the first row, if the title is present
         titleOpt.ifPresent(title -> createTitle(sheet, createRow(sheet, rowIndex.incr()), title, annotatedExcelColumns.size()));
@@ -169,7 +172,8 @@ public final class ExcelUtils {
 
             // for each field of the object
             for (int j = 0; j < annotatedExcelColumns.size(); j++) {
-                setCellReflectively(row, j, annotatedExcelColumns.get(j).getField(), currData);
+                final AnnotatedExcelColumn col = annotatedExcelColumns.get(j);
+                setCellReflectively(row, j, col.getField(), Optional.ofNullable(col.getToStringMethodName()), currData);
             }
         }
     }
@@ -188,13 +192,26 @@ public final class ExcelUtils {
     /**
      * Set value to the specified cell using reflection
      */
-    public static void setCellReflectively(Row row, int col, Field f, Object o) {
-        f.setAccessible(true);
-        try {
-            createStringCell(row, col, getNullableAndConvert(f.get(o), Object::toString, ""));
-        } catch (IllegalAccessException e) {
-            throw new IllegalStateException("Failed to get value, fieldName: " + f.getName(), e);
+    public static void setCellReflectively(final Row row, final int col, final Field f, final Optional<String> toStringMethodName, final Object o) {
+        final Function<Object, String> toStringFunc;
+        if (toStringMethodName.isPresent() && StringUtils.hasText(toStringMethodName.get()) && o != null) {
+            // invoke the method, and then call toString on the returned value
+            toStringFunc = fieldValue -> {
+
+                if (fieldValue == null) return "";
+
+                // try to find the method with the toStringMethodName
+                final Class fieldValueClz = fieldValue.getClass();
+                final Optional<Method> fieldValueMethod = findMethod(toStringMethodName.get(), fieldValueClz);
+                isTrue(fieldValueMethod.isPresent(), "Method %s not found from class %s", toStringMethodName.get(), fieldValueClz);
+
+                final Object returnedFromInvoke = invokeMethod(fieldValueMethod.get(), fieldValue);
+                return getNullableAndConvert(returnedFromInvoke, Object::toString, "");
+            };
+        } else {
+            toStringFunc = Object::toString; // call toString directly
         }
+        createStringCell(row, col, getNullableAndConvert(getFieldValue(f, o), toStringFunc, ""));
     }
 
     /**
@@ -218,24 +235,16 @@ public final class ExcelUtils {
     }
 
     /**
-     * Parse field names using {@link ExcelColName}
+     * Parse field annotated with {@link ExcelCol}
      */
-    public static List<AnnotatedExcelColumn> parseFieldNames(Class<?> clz) {
+    public static List<AnnotatedExcelColumn> parseExcelFields(Class<?> clz) {
         Assert.notNull(clz, "clazz is null, unable to parse field names");
 
-        // fieldName -> column name
         final List<AnnotatedExcelColumn> colList = new ArrayList<>();
-        final Field[] declareFields = clz.getDeclaredFields();
-
-        for (final Field f : declareFields) {
-            final ExcelColName[] annot = f.getDeclaredAnnotationsByType(ExcelColName.class);
-            if (annot.length == 0) continue;
-
-            // only use the first annotation
-            final ExcelColName ecn = annot[0];
-
-            colList.add(new AnnotatedExcelColumn(f, ecn.value()));
-        }
+        declaredFieldsAsStream(clz).forEach(f ->
+                firstDeclaredAnnotation(f, ExcelCol.class)
+                        .ifPresent(excelCol -> colList.add(new AnnotatedExcelColumn(f, excelCol.value(), excelCol.toStringMethod())))
+        );
         return colList;
     }
 
@@ -255,6 +264,8 @@ public final class ExcelUtils {
         private final Field field;
         /** name of column (being displayed in excel) */
         private final String displayedColumnName;
+        /** method to convert the value to String */
+        private final String toStringMethodName;
     }
 
 

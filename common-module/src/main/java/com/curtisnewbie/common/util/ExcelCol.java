@@ -10,7 +10,11 @@ import java.lang.annotation.*;
 @Documented
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ExcelColName {
+public @interface ExcelCol {
 
+    /** Name of the Excel column */
     String value() default "";
+
+    /** name of the method to convert value to String */
+    String toStringMethod() default "";
 }
