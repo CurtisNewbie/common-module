@@ -89,6 +89,34 @@ public final class AssertUtils {
     /**
      * Assert not null
      */
+    public static <T> void notNull(T t) {
+        nonNull(t);
+    }
+
+    /**
+     * Assert not null
+     */
+    public static <T> void notNull(T t, String errMsg) {
+        nonNull(t, errMsg);
+    }
+
+    /**
+     * Assert not null
+     */
+    public static <T> void notNull(T t, ErrorType errorType) {
+        nonNull(t, errorType);
+    }
+
+    /**
+     * Assert not null
+     */
+    public static <T> void notNull(T t, String errMsgPattern, Object... args) {
+        nonNull(t, errMsgPattern, args);
+    }
+
+    /**
+     * Assert not null
+     */
     public static <T> void nonNull(T t) {
         nonNull(t, DEFAULT_NON_NULL_OR_EMPTY_MSG);
     }
