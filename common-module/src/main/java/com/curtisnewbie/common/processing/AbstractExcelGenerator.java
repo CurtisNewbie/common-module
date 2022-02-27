@@ -9,7 +9,7 @@ import java.io.*;
  *
  * @author yongj.zhuang
  */
-public abstract class AbstractExcelGenerator<T> implements ExcelGenerator<T> {
+public abstract class AbstractExcelGenerator<T> implements ExcelGenerator<T>, Closeable {
 
     protected Workbook workbook;
 
@@ -22,4 +22,8 @@ public abstract class AbstractExcelGenerator<T> implements ExcelGenerator<T> {
         return workbook;
     }
 
+    @Override
+    public void close() throws IOException {
+        workbook.close();
+    }
 }
