@@ -3,7 +3,7 @@ package com.curtisnewbie.common.util;
 import java.lang.annotation.*;
 
 /**
- * Name of an Excel field
+ * An Excel field
  *
  * @author yongj.zhuang
  */
@@ -15,6 +15,6 @@ public @interface ExcelCol {
     /** Name of the Excel column */
     String value() default "";
 
-    /** name of the method to convert value to String */
+    /** Name of the method (on the value object's class) to convert value to String */
     String toStringMethod() default "";
 }
