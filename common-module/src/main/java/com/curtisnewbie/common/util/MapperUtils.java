@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.*;
 import com.baomidou.mybatisplus.core.conditions.query.*;
 import com.baomidou.mybatisplus.core.mapper.*;
 import com.curtisnewbie.common.dao.*;
+import org.springframework.lang.*;
 import org.springframework.util.*;
 
 import java.util.*;
@@ -40,8 +41,7 @@ public final class MapperUtils {
     /**
      * Select a list of entities and convert it
      */
-    public static <T, V> List<V> selectListAndConvert(Wrapper<T> wrapper, BaseMapper<T> baseMapper, Function<T, V> converter) {
-        Assert.notNull(wrapper, "wrapper == null");
+    public static <T, V> List<V> selectListAndConvert(@Nullable Wrapper<T> wrapper, BaseMapper<T> baseMapper, Function<T, V> converter) {
         Assert.notNull(converter, "converter == null");
         List<T> tl = baseMapper.selectList(wrapper);
         return tl.stream().map(converter::apply).collect(Collectors.toList());
