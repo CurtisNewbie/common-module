@@ -43,10 +43,27 @@ public final class StructUtils {
         return first(collection, predicate).orElse(null);
     }
 
-    /** Convert list of elements to map */
+    /**
+     * Convert list of elements to map
+     *
+     * @param collection collection (of V)
+     * @param groupingBy key mapping function (V -> key K)
+     * @return map of K and V
+     */
     public static <K, V> Map<K, V> toMap(List<V> collection, Function<V, K> groupingBy) {
-        Map<K, V> m = new HashMap<>();
-        collection.forEach(v -> m.put(groupingBy.apply(v), v));
-        return m;
+        return toMap(collection, groupingBy, Function.identity());
+    }
+
+    /**
+     * Convert list of elements to map
+     *
+     * @param collection collection (of T)
+     * @param toKey      key mapping function (T -> key K)
+     * @param toValue    value mapping function (T -> value V)
+     * @return map of K and V
+     */
+    public static <K, V, T> Map<K, V> toMap(List<T> collection, Function<T, K> toKey, Function<T, V> toValue) {
+        return collection.stream()
+                .collect(Collectors.toMap(toKey, toValue));
     }
 }
