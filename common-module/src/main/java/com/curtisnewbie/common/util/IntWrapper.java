@@ -2,6 +2,7 @@ package com.curtisnewbie.common.util;
 
 import lombok.*;
 
+// todo, to be moved to data package
 /**
  * Wrapper of int value (useful for lambda)
  *

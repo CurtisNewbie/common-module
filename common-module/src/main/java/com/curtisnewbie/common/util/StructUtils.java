@@ -1,5 +1,7 @@
 package com.curtisnewbie.common.util;
 
+import com.curtisnewbie.common.data.*;
+
 import java.util.*;
 import java.util.function.*;
 import java.util.function.Function;
@@ -66,4 +68,12 @@ public final class StructUtils {
         return collection.stream()
                 .collect(Collectors.toMap(toKey, toValue));
     }
+
+    /**
+     * Convert stream of {@link BiContainer} to map, the left value becomes the key, and right value becomes the value
+     */
+    public static <K, V> Map<K, V> toMap(Stream<BiContainer<K, V>> s) {
+        return s.collect(Collectors.toMap(BiContainer::getLeft, BiContainer::getRight));
+    }
+
 }
