@@ -7,8 +7,8 @@ package com.curtisnewbie.common.util;
  */
 public class DefaultErrorType implements ErrorType {
 
-    private String code;
-    private String msg;
+    private final String code;
+    private final String msg;
 
     public DefaultErrorType(String code, String msg) {
         this.code = code;

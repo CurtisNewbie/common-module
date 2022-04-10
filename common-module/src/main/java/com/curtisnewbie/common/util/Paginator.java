@@ -72,7 +72,7 @@ public final class Paginator<T> {
     /** whether current page has data */
     public boolean hasContent() {
         if (isFirstPage) { // load the first page
-            nextPage();
+            _nextPage();
             isFirstPage = false;
         }
 
@@ -100,8 +100,8 @@ public final class Paginator<T> {
         }
     }
 
-    /** Laod the next page */
-    public void nextPage() {
+    /** Load the next page */
+    public void _nextPage() {
         Assert.notNull(nextPageSupplier, "nextPageSupplier == null");
 
         // next page
@@ -138,7 +138,7 @@ public final class Paginator<T> {
     public void loopPageTilEnd(final Consumer<List<T>> doForPage) {
         while (hasContent()) {
             _doForPage(doForPage);
-            nextPage();
+            _nextPage();
         }
     }
 
@@ -161,7 +161,7 @@ public final class Paginator<T> {
     public void loopEachTilEnd(final Consumer<T> doForEach) {
         while (hasContent()) {
             _doForEach(doForEach);
-            nextPage();
+            _nextPage();
         }
     }
 

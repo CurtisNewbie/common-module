@@ -1,4 +1,4 @@
-package com.curtisnewbie.util;
+package com.curtisnewbie.common.util;
 
 import java.util.HashSet;
 import java.util.Map;
