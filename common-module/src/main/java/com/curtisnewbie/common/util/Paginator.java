@@ -45,10 +45,10 @@ public final class Paginator<T> {
     private Function<PagingParam, List<T>> nextPageSupplier;
     /** whether current page is the first page */
     private boolean isFirstPage = true;
-    /** consumer of page size after {@link #doForEach(Consumer)} */
+    /** consumer of page size after {@link #_doForEach(Consumer)} */
     private Consumer<Integer> onCurrentPageComplete = null;
 
-    /** consumer of page size that is invoked after {@link #doForEach(Consumer)} */
+    /** consumer of page size that is invoked after {@link #_doForEach(Consumer)} */
     public Paginator<T> onCurrentPageComplete(Consumer<Integer> onCurrentPageComplete) {
         this.onCurrentPageComplete = onCurrentPageComplete;
         return this;
@@ -80,7 +80,7 @@ public final class Paginator<T> {
     }
 
     /** Do something for each item in current page */
-    public void doForEach(final Consumer<T> doForEach) {
+    public void _doForEach(final Consumer<T> doForEach) {
         Assert.notNull(doForEach, "doForEach == null");
 
         if (hasContent()) {
@@ -92,7 +92,7 @@ public final class Paginator<T> {
     /**
      * Do something for current page
      */
-    public void doForPage(final Consumer<List<T>> doForPage) {
+    public void _doForPage(final Consumer<List<T>> doForPage) {
         Assert.notNull(doForPage, "doForPage == null");
         if (hasContent()) {
             doForPage.accept(list);
@@ -137,7 +137,7 @@ public final class Paginator<T> {
      */
     public void loopPageTilEnd(final Consumer<List<T>> doForPage) {
         while (hasContent()) {
-            doForPage(doForPage);
+            _doForPage(doForPage);
             nextPage();
         }
     }
@@ -160,7 +160,7 @@ public final class Paginator<T> {
      */
     public void loopEachTilEnd(final Consumer<T> doForEach) {
         while (hasContent()) {
-            doForEach(doForEach);
+            _doForEach(doForEach);
             nextPage();
         }
     }
