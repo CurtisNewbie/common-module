@@ -57,6 +57,16 @@ public class Result<T> implements Serializable {
         return resp;
     }
 
+    public static <T> Result<T> error(String errMsg, String errorCode) {
+        Result<T> resp = new Result<T>();
+        resp.hasError = true;
+        resp.error = true;
+        resp.msg = errMsg;
+        resp.errorCode = errorCode;
+        resp.data = null;
+        return resp;
+    }
+
     public String getMsg() {
         return msg;
     }

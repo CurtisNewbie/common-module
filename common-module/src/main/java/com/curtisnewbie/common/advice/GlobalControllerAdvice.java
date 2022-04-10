@@ -36,12 +36,11 @@ public class GlobalControllerAdvice {
     @ExceptionHandler({UnrecoverableException.class})
     @ResponseBody
     public Result<?> handleUnrecoverableMsgEmbeddedException(UnrecoverableException e) {
-        log.error("Unrecoverable exception occurred", e);
         String errorMsg = e.getEmbeddedMsg();
         if (!StringUtils.hasText(errorMsg)) {
             errorMsg = "Invalid request";
         }
-        return Result.error(errorMsg);
+        return Result.error(errorMsg, e.getErrorCode());
     }
 
 }
