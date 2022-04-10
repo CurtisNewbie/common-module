@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Result for REST Endpoints
@@ -86,6 +87,18 @@ public class Result<T> implements Serializable {
     @JsonIgnore
     public void assertIsOk() {
         AssertUtils.isTrue(isOk(), new DefaultErrorType(errorCode, msg));
+    }
+
+    /**
+     * Check if it's the given ErrorType
+     */
+    @JsonIgnore
+    public boolean isErrorType(final ErrorType errorType) {
+        if (errorType == null)
+            return false;
+        if (!hasError())
+            return false;
+        return Objects.equals(errorCode, errorType.getCode());
     }
 
     public boolean hasError() {
