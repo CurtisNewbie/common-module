@@ -1,6 +1,7 @@
 package com.curtisnewbie.common.exceptions;
 
 
+import com.curtisnewbie.common.util.ErrorType;
 import lombok.Data;
 
 /**
@@ -20,6 +21,10 @@ public class UnrecoverableException extends IllegalStateException {
      * Error code
      */
     private final String errorCode;
+
+    public UnrecoverableException(ErrorType errorType) {
+        this(errorType.getMsg(), errorType.getCode());
+    }
 
     public UnrecoverableException(String msg) {
         super(msg);
