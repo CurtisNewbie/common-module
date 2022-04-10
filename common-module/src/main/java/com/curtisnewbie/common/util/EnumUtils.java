@@ -6,6 +6,8 @@ import com.curtisnewbie.common.enums.ValueEnum;
 import java.util.Objects;
 
 /**
+ * Utils for Enum
+ *
  * @author yongjie.zhuang
  */
 public final class EnumUtils {

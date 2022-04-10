@@ -14,7 +14,9 @@ import java.util.Objects;
  * </p>
  *
  * @author yongjie.zhuang
+ * @deprecated use {@link AssertUtils} instead
  */
+@Deprecated
 public final class ValidUtils {
     private static final String DEFAULT_NON_NULL_MSG = "Required parameters cannot be null or empty";
 

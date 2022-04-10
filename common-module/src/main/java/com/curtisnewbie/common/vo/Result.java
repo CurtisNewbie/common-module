@@ -1,6 +1,5 @@
 package com.curtisnewbie.common.vo;
 
-import com.curtisnewbie.common.exceptions.UnrecoverableException;
 import com.curtisnewbie.common.util.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -8,7 +7,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * Result for frontend communication
+ * Result for REST Endpoints
  *
  * @author yongjie.zhuang
  */

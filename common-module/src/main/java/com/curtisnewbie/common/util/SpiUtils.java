@@ -29,7 +29,7 @@ public final class SpiUtils {
     /**
      * Load first instance through SPI
      *
-     * @throws if none instance is found
+     * @throws IllegalStateException if none instance is found
      * @see #loadFirstNullable(Class)
      */
     public static <T> T loadFirst(Class<T> tclz) {
