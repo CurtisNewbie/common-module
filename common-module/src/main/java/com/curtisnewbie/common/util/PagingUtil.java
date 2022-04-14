@@ -22,6 +22,13 @@ public final class PagingUtil {
     }
 
     /**
+     * Concatenate 'LIMIT $offset, $limit' string
+     */
+    public static String limit(long offset, long limit) {
+        return String.format("LIMIT %s, %s", offset, limit);
+    }
+
+    /**
      * Convert type and wrap result in a {@link PageablePayloadSingleton} which internally contains a {@link PagingVo}
      *
      * @param srcPageInfo source object page info
