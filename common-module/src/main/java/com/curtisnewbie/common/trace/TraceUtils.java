@@ -18,6 +18,10 @@ public final class TraceUtils {
     public static final String USERNAME = "username";
     public static final String USER_ROLE = "role";
 
+    private TraceUtils() {
+
+    }
+
     /** Put value for the key */
     public static void put(String key, String value) {
         Assert.notNull(key, "key == null");
