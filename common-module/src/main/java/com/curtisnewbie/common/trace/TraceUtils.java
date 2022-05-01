@@ -47,7 +47,7 @@ public final class TraceUtils {
 
         put(USER_ID, String.valueOf(tu.getUserId()));
         put(USERNAME, tu.getUsername());
-        put(USER_ROLE, tu.getUsername());
+        put(USER_ROLE, tu.getRole());
     }
 
     /** Build TUser from the trace info, if it's absent, throws exception instead of returning null */
