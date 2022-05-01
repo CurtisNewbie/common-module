@@ -3,6 +3,8 @@ package com.curtisnewbie.common.util;
 import com.baomidou.mybatisplus.core.conditions.*;
 import com.baomidou.mybatisplus.core.conditions.query.*;
 import com.baomidou.mybatisplus.core.mapper.*;
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
+import com.baomidou.mybatisplus.extension.api.R;
 import com.curtisnewbie.common.dao.*;
 import org.springframework.lang.*;
 import org.springframework.util.*;
@@ -27,6 +29,37 @@ public final class MapperUtils {
         final QueryWrapper<T> w = new QueryWrapper<T>()
                 .eq(column, value);
         return baseMapper.update(entity, w);
+    }
+
+    /**
+     * Update only one record by a column that equals the value
+     */
+    public static <T> int updateOneEq(SFunction<T, ?> col, Object value, BaseMapper<T> baseMapper, T entity) {
+        return baseMapper.update(entity,
+                new LambdaQueryWrapper<T>()
+                        .eq(col, value)
+                        .last("limit 1")
+        );
+    }
+
+    /**
+     * Update by a column that equals the value
+     */
+    public static <T> int updateEq(SFunction<T, ?> col, Object value, BaseMapper<T> baseMapper, T entity) {
+        return baseMapper.update(entity,
+                new LambdaQueryWrapper<T>()
+                        .eq(col, value)
+        );
+    }
+
+    /**
+     * Select one by a column that equals the value
+     */
+    public static <T> T selectOneEq(SFunction<T, ?> column, Object value, BaseMapper<T> baseMapper) {
+        return baseMapper.selectOne(
+                new LambdaQueryWrapper<T>()
+                        .eq(column, value)
+        );
     }
 
     /**
