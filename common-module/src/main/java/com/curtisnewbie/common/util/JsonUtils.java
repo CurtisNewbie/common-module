@@ -22,6 +22,13 @@ public final class JsonUtils {
     }
 
     /**
+     * Write value as a prettified json string using internally cached {@link JsonMapper}
+     */
+    public static String writePretty(Object o) throws JsonProcessingException {
+        return jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(o);
+    }
+
+    /**
      * Write value as String using internally cached {@link JsonMapper}
      */
     public static String writeValueAsString(Object o) throws JsonProcessingException {
