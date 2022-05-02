@@ -10,6 +10,9 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Advice that validate role before calling the annotated methods
@@ -30,9 +33,17 @@ public class RoleEnforcedAdvice {
 
         // validate role before proceed
         final String required = roleRequired.role();
+
         if (StringUtils.hasText(required)) {
-            TUser tUser = TraceUtils.tUser();
-            AssertUtils.equals(tUser.getRole(), required, "Not permitted");
+
+            final TUser tUser = TraceUtils.tUser();
+
+            // there can be multiple roles, try to split it first
+            final Set<String> requiredRoles = Arrays.stream(required.split(","))
+                    .map(String::trim)
+                    .collect(Collectors.toSet());
+
+            AssertUtils.isTrue(requiredRoles.contains(tUser.getRole()), "Not permitted");
         }
 
         return pjp.proceed();

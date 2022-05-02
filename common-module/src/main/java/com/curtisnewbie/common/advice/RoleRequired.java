@@ -17,7 +17,7 @@ import java.lang.annotation.*;
 public @interface RoleRequired {
 
     /**
-     * Role
+     * Role (can be multiple roles delimited by comma)
      */
     String role();
 }
