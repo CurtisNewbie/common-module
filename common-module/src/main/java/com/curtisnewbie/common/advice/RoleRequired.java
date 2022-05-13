@@ -11,7 +11,7 @@ import java.lang.annotation.*;
  *
  * @see TraceUtils#tUser()
  */
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RoleRequired {
