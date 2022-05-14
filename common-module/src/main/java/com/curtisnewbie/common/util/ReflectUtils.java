@@ -21,6 +21,20 @@ public final class ReflectUtils {
         return Arrays.stream(clz.getDeclaredFields());
     }
 
+    /** Get declared annotations on class */
+    public static <T extends Annotation> Optional<T[]> annotationsOnClass(Class<?> clazz, Class<T> annotation) {
+        Objects.requireNonNull(clazz);
+        Objects.requireNonNull(annotation);
+        return Optional.of(clazz.getDeclaredAnnotationsByType(annotation));
+    }
+
+    /** Get declared annotation on class */
+    public static <T extends Annotation> Optional<T> annotationOnClass(Class<?> clazz, Class<T> annotationType) {
+        Objects.requireNonNull(clazz);
+        Objects.requireNonNull(annotationType);
+        return Optional.ofNullable(clazz.getDeclaredAnnotation(annotationType));
+    }
+
     /** Get value from field */
     public static Object getFieldValue(Field f, Object o) {
         f.setAccessible(true);
