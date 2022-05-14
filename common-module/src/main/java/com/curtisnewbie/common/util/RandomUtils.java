@@ -13,7 +13,7 @@ import java.util.Objects;
 public final class RandomUtils {
 
     private static final SecureRandom secureRandom = new SecureRandom();
-    public static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyDDmmHHmmss");
+    public static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
     private static final int NUMERIC_LEN = 10;
     private static final int ALPHABET_LEN = 52;
     private static final int ALPHA_NUMERIC_LEN = NUMERIC_LEN + ALPHABET_LEN;
@@ -71,7 +71,7 @@ public final class RandomUtils {
     }
 
     /**
-     * Timestamp in forms of 'yyyyDDmmHHmmss'
+     * Timestamp in forms of 'yyyyMMddHHmmss'
      */
     public static String timestamp() {
         return LocalDateTime.now().format(dateTimeFormatter);
