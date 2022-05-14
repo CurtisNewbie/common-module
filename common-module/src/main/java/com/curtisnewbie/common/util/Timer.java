@@ -26,7 +26,7 @@ public class Timer {
     }
 
     /** start the timer */
-    private void start() {
+    public void start() {
         Assert.isNull(startTime, "Timer started already");
         startTime = LocalDateTime.now();
     }

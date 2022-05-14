@@ -1,6 +1,7 @@
 package com.curtisnewbie.common.util;
 
 import lombok.*;
+import org.springframework.lang.Nullable;
 import org.springframework.util.*;
 
 import java.util.*;
@@ -47,6 +48,15 @@ public final class Paginator<T> {
     private boolean isFirstPage = true;
     /** consumer of page size after {@link #_doForEach(Consumer)} */
     private Consumer<Integer> onCurrentPageComplete = null;
+    /** Timer (nullable) */
+    private Timer timer = null;
+
+    /** set whether the looping is timed */
+    public Paginator<T> isTimed(boolean isTimed) {
+        if (isTimed)
+            timer = new Timer();
+        return this;
+    }
 
     /** consumer of page size that is invoked after {@link #_doForEach(Consumer)} */
     public Paginator<T> onCurrentPageComplete(Consumer<Integer> onCurrentPageComplete) {
@@ -136,10 +146,12 @@ public final class Paginator<T> {
      * </pre>
      */
     public void loopPageTilEnd(final Consumer<List<T>> doForPage) {
+        tryStartTimer();
         while (hasContent()) {
             _doForPage(doForPage);
             _nextPage();
         }
+        tryStopTimer();
     }
 
     /**
@@ -159,15 +171,37 @@ public final class Paginator<T> {
      * </pre>
      */
     public void loopEachTilEnd(final Consumer<T> doForEach) {
+        tryStartTimer();
         while (hasContent()) {
             _doForEach(doForEach);
             _nextPage();
         }
+        tryStopTimer();
+    }
+
+    /**
+     * Get timer
+     *
+     * @return timer or null if it's not "timed"
+     */
+    @Nullable
+    public Timer getTimer() {
+        return timer;
     }
 
     private void doOnCurrentPageComplete() {
         if (onCurrentPageComplete != null)
             onCurrentPageComplete.accept(list.size());
+    }
+
+    private void tryStopTimer() {
+        if (timer != null)
+            timer.stop();
+    }
+
+    private void tryStartTimer() {
+        if (timer != null)
+            timer.start();
     }
 
     @Data
