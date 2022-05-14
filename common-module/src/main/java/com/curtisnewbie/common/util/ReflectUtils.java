@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.stream.*;
 
 /**
- * Reflection Utils
+ * Reflect Utils
  *
  * @author yongj.zhuang
  */

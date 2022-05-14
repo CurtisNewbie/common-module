@@ -3,16 +3,14 @@ package com.curtisnewbie.common.util;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
 import java.util.Objects;
-import java.util.function.Supplier;
 
 /**
  * Random Utils
  *
  * @author yongj.zhuang
  */
-public class RandomUtils {
+public final class RandomUtils {
 
     private static final SecureRandom secureRandom = new SecureRandom();
     public static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyDDmmHHmmss");
@@ -43,6 +41,10 @@ public class RandomUtils {
         System.arraycopy(numeric, 0, alphaNumeric, 0, NUMERIC_LEN);
         System.arraycopy(alphabet, 0, alphaNumeric, NUMERIC_LEN, ALPHABET_LEN);
         shuffle(alphaNumeric, 3);
+    }
+
+    private RandomUtils() {
+
     }
 
     /**
