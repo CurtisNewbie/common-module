@@ -5,7 +5,11 @@ import com.curtisnewbie.common.util.AssertUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
+import java.util.Arrays;
 import java.util.Optional;
+
+import static java.lang.String.join;
+import static java.util.Arrays.asList;
 
 /**
  * Trace Utils
@@ -17,6 +21,7 @@ public final class TraceUtils {
     public static final String USER_ID = "id";
     public static final String USERNAME = "username";
     public static final String USER_ROLE = "role";
+    public static final String SERVICES = "services";
 
     private TraceUtils() {
 
@@ -48,6 +53,7 @@ public final class TraceUtils {
         put(USER_ID, String.valueOf(tu.getUserId()));
         put(USERNAME, tu.getUsername());
         put(USER_ROLE, tu.getRole());
+        put(SERVICES, tu.getServices() != null ? join(",", tu.getServices()) : "");
     }
 
     /** Build TUser from the trace info, if it's absent, throws exception instead of returning null */
@@ -63,10 +69,14 @@ public final class TraceUtils {
         if (id == null)
             return Optional.empty();
 
+        String ss = get(SERVICES);
+        if (ss == null) ss = "";
+
         return Optional.of(TUser.builder()
                 .userId(Integer.parseInt(id))
                 .username(get(USERNAME))
                 .role(get(USER_ROLE))
+                .services(asList(ss.split(",")))
                 .build());
     }
 }
