@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * User's trace info
  *
@@ -19,4 +21,6 @@ public class TUser {
     private final String username;
 
     private final String role;
+
+    private final List<String> services;
 }
