@@ -1,5 +1,6 @@
 package com.curtisnewbie.common.trace;
 
+import brave.*;
 import brave.baggage.BaggageField;
 import com.curtisnewbie.common.util.AssertUtils;
 import org.springframework.lang.Nullable;
@@ -78,6 +79,18 @@ public final class TraceUtils {
                 .role(get(USER_ROLE))
                 .services(asList(ss.split(",")))
                 .build());
+    }
+
+    /**
+     * Create new span before running the Runnable, and finish the span when Runnable returns
+     */
+    public static void runWithSpan(Runnable r, Tracer tracer) {
+        final Span newSpan = tracer.nextSpan().start();
+        try (Tracer.SpanInScope ws = tracer.withSpanInScope(newSpan.start())) {
+            r.run();
+        } finally {
+            newSpan.finish();
+        }
     }
 }
 
