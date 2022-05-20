@@ -46,7 +46,11 @@ public class EventPool {
     }
 
     /**
-     * Publish spring event asynchronously, if exception occurs, the exception will only be logged instead of being rethrown
+     * Publish spring event asynchronously, if exception occurs, the exception will only be logged instead of being
+     * rethrown
+     * <p>
+     * Extra mechanism must be in place to ensure the all events are processed correctly, this event pool does not
+     * provide such guarantee, e.g., having a scheduled job that compensates the errors
      */
     public void publish(Object event) {
         submit(() -> eventPublisher.publishEvent(event));
