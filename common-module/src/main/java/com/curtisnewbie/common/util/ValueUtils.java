@@ -1,7 +1,12 @@
 package com.curtisnewbie.common.util;
 
+import org.apache.poi.ss.formula.functions.T;
+import org.springframework.util.Assert;
+
 import java.math.*;
 import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Value Utils
@@ -77,6 +82,34 @@ public final class ValueUtils {
      */
     public static boolean inBetween(int val, int start, int end) {
         return val >= start && val <= end;
+    }
+
+    /**
+     * Set value, if value is null the default value is used
+     */
+    public static <T> void setIfNull(Consumer<T> setter, T value, T defaultVal) {
+        Assert.notNull(setter, "setter == null");
+
+        final T toBeSet = value != null ? value : defaultVal;
+        setter.accept(toBeSet);
+    }
+
+    /**
+     * Call setter with the value returned by the supplier if the value is null
+     */
+    public static <T> void setIfValNull(Consumer<T> setter, T value, Supplier<T> valueSupplier) {
+        setIfTrue(setter, value == null, valueSupplier);
+    }
+
+    /**
+     * Call setter with the given value returned by the valueSupplier if the condition return true
+     */
+    public static <T> void setIfTrue(Consumer<T> setter, boolean useSetter, Supplier<T> valueSupplier) {
+        Assert.notNull(setter, "setter == null");
+        Assert.notNull(valueSupplier, "valueSupplier == null");
+
+        if (useSetter)
+            setter.accept(valueSupplier.get());
     }
 
 }
