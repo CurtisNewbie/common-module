@@ -11,38 +11,40 @@ import java.util.function.*;
 import static com.curtisnewbie.common.trace.TraceUtils.*;
 
 /**
- * <p>
  * Event Pool that supports convenient async processing of disposable spring application event
- * </p>
+ * <p>
+ * See {@link #defaultExceptionHandler()} for default exception handler
+ * <p>
+ * See {@link #defaultExecutor()} and {@link #defaultExecutor(int, int)} for default executor service
  *
  * @author yongj.zhuang
  */
 @Slf4j
 public class EventPool {
 
-    private final ExecutorService eventPool;
+    private final ExecutorService executorService;
+    private final Consumer<Throwable> exceptionHandler;
 
     @Autowired
     private Tracer tracer;
     @Autowired
     private ApplicationEventPublisher eventPublisher;
 
-    /**
-     * Construct with default config: corePoolSize=4, maximumPoolSize=8, blockingQueue.capacity=500, DiscardPolicy
-     */
     public EventPool() {
-        this(4, 500, new ThreadPoolExecutor.DiscardPolicy());
+        this(defaultExecutor(), defaultExceptionHandler());
     }
 
-    public EventPool(int poolSize, int maxQueueSize, RejectedExecutionHandler rejectedExecutionHandler) {
-        eventPool = new ThreadPoolExecutor(
-                poolSize,
-                poolSize,
-                0,
-                TimeUnit.SECONDS,
-                new LinkedBlockingQueue<>(maxQueueSize),
-                rejectedExecutionHandler
-        );
+    public EventPool(ExecutorService executorService, Consumer<Throwable> exceptionHandler) {
+        this.executorService = executorService;
+        this.exceptionHandler = exceptionHandler;
+    }
+
+    public EventPool(Consumer<Throwable> exceptionHandler) {
+        this(defaultExecutor(), exceptionHandler);
+    }
+
+    public EventPool(ExecutorService executorService) {
+        this(executorService, defaultExceptionHandler());
     }
 
     /**
@@ -61,7 +63,7 @@ public class EventPool {
     private void submit(Runnable r, Consumer<Throwable> exceptionHandler) {
         try {
             CompletableFuture
-                    .runAsync(() -> runWithSpan(r, tracer), eventPool)
+                    .runAsync(() -> runWithSpan(r, tracer), executorService)
                     .exceptionally(e -> {
                         if (exceptionHandler != null)
                             exceptionHandler.accept(e);
@@ -73,6 +75,31 @@ public class EventPool {
     }
 
     private void submit(Runnable r) {
-        submit(r, e -> log.warn("EventPool.publishEvent error", e));
+        submit(r, exceptionHandler);
+    }
+
+    /**
+     * Fixed core size: 4, queue size: 500, with DiscardPolicy
+     */
+    public static ExecutorService defaultExecutor() {
+        return defaultExecutor(4, 500);
+    }
+
+    /**
+     * Fixed core size with DiscardPolicy
+     */
+    public static ExecutorService defaultExecutor(int coreSize, int queueSize) {
+        return new ThreadPoolExecutor(
+                coreSize,
+                coreSize,
+                0,
+                TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<>(queueSize),
+                new ThreadPoolExecutor.DiscardPolicy()
+        );
+    }
+
+    public static Consumer<Throwable> defaultExceptionHandler() {
+        return e -> log.warn("EventPool.publishEvent error", e);
     }
 }
