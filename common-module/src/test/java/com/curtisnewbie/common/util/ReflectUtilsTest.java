@@ -1,23 +1,22 @@
 package com.curtisnewbie.common.util;
 
-import com.curtisnewbie.common.advice.RoleRequired;
+import com.curtisnewbie.common.advice.RoleControlled;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import javax.management.relation.Role;
 import java.util.Optional;
 
 /**
  * @author yongj.zhuang
  */
 @Slf4j
-@RoleRequired(role = "random")
+@RoleControlled(rolesRequired = "random")
 public class ReflectUtilsTest {
 
     @Test
     public void should_parse_class_annotation() {
-        final Optional<RoleRequired> slf4j = ReflectUtils.annotationOnClass(ReflectUtilsTest.class, RoleRequired.class);
+        final Optional<RoleControlled> slf4j = ReflectUtils.annotationOnClass(ReflectUtilsTest.class, RoleControlled.class);
         Assertions.assertTrue(slf4j.isPresent());
     }
 }
