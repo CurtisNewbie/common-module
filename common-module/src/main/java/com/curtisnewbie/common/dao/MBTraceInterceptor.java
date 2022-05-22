@@ -10,8 +10,6 @@ import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.plugin.Intercepts;
 import org.apache.ibatis.plugin.Invocation;
 import org.apache.ibatis.plugin.Signature;
-import org.springframework.jdbc.core.metadata.SqlServerCallMetaDataProvider;
-import org.springframework.util.StringUtils;
 
 import java.util.Map;
 import java.util.Optional;
