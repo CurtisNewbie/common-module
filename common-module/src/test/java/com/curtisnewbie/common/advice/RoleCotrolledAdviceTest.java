@@ -1,8 +1,6 @@
 package com.curtisnewbie.common.advice;
 
 import com.curtisnewbie.common.exceptions.UnrecoverableException;
-import com.curtisnewbie.common.trace.TUser;
-import com.curtisnewbie.common.trace.TraceUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,8 +14,8 @@ import org.springframework.stereotype.Component;
  */
 @EnableRoleControl
 @SpringBootApplication(scanBasePackages = "com.curtisnewbie.common.advice")
-@SpringBootTest(classes = RoleEnforcedAdviceTest.class)
-public class RoleEnforcedAdviceTest {
+@SpringBootTest(classes = RoleCotrolledAdviceTest.class)
+public class RoleCotrolledAdviceTest {
 
     @Autowired
     private Dummy dummy;
