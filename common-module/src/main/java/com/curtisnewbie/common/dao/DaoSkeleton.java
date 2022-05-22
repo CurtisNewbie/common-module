@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 
   ...
 
-  create_time DATETIME NOT NULL DEFAULT NOW() COMMENT 'when the record is created',
+  create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'when the record is created',
   create_by VARCHAR(255) NOT NULL DEFAULT '' COMMENT 'who created this record',
-  update_time DATETIME NOT NULL DEFAULT NOW() COMMENT 'when the record is updated',
+  update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'when the record is updated',
   update_by VARCHAR(255) NOT NULL DEFAULT '' COMMENT 'who updated this record',
   is_del TINYINT NOT NULL DEFAULT '0' COMMENT '0-normal, 1-deleted',
 
@@ -65,7 +65,10 @@ public class DaoSkeleton {
 
     /**
      * Set createTime to now if absent
+     *
+     * @deprecated use {@link EnableMBTraceInterceptor} instead
      */
+    @Deprecated
     public void setCreateTimeIfAbsent() {
         if (createTime == null)
             createTime = LocalDateTime.now();
@@ -73,7 +76,10 @@ public class DaoSkeleton {
 
     /**
      * Set updateTime to now if absent
+     *
+     * @deprecated use {@link EnableMBTraceInterceptor} instead
      */
+    @Deprecated
     public void setUpdateTimeIfAbsent() {
         if (updateTime == null)
             updateTime = LocalDateTime.now();
@@ -81,7 +87,10 @@ public class DaoSkeleton {
 
     /**
      * set createBy and createTime (if absent)
+     *
+     * @deprecated use {@link EnableMBTraceInterceptor} instead
      */
+    @Deprecated
     public void onCreate(String createdBy) {
         this.setCreateBy(createdBy);
         setCreateTimeIfAbsent();
@@ -89,7 +98,10 @@ public class DaoSkeleton {
 
     /**
      * set updateBy and updateTime (if absent)
+     *
+     * @deprecated use {@link EnableMBTraceInterceptor} instead
      */
+    @Deprecated
     public void onUpdate(String updatedBy) {
         this.setUpdateBy(updatedBy);
         setUpdateTimeIfAbsent();
