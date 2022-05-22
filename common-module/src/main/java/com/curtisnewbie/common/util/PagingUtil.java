@@ -73,7 +73,7 @@ public final class PagingUtil {
         }
         final PageableVo<List<V>> p = new PageableVo<>();
         p.setPagingVo(forIPage(srcPageInfo));
-        p.setData(
+        p.setPayload(
                 srcPageInfo.getRecords()
                         .stream()
                         .map(converter::apply)
@@ -92,7 +92,7 @@ public final class PagingUtil {
         }
         final PageableVo<List<V>> p = new PageableVo<>();
         p.setPagingVo(forIPage(srcPageInfo));
-        p.setData(srcPageInfo.getRecords());
+        p.setPayload(srcPageInfo.getRecords());
         return p;
     }
 
@@ -105,9 +105,9 @@ public final class PagingUtil {
         }
         final PageableVo<List<V>> p = new PageableVo<>();
         p.setPagingVo(srcPv.getPagingVo());
-        if (srcPv.getData() != null) {
-            p.setData(
-                    srcPv.getData()
+        if (srcPv.getPayload() != null) {
+            p.setPayload(
+                    srcPv.getPayload()
                             .stream()
                             .map(converter::apply)
                             .collect(Collectors.toList())

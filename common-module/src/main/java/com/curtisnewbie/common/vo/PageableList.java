@@ -16,7 +16,7 @@ public class PageableList<T> extends PageableVo<List<T>> {
 
     public static <T> PageableList<T> from(Page<T> page) {
         PageableList<T> p = new PageableList<>();
-        p.setData(page.getRecords());
+        p.setPayload(page.getRecords());
         p.setPagingVo(forIPage(page));
         return p;
     }

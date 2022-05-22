@@ -14,9 +14,10 @@ import java.util.function.Consumer;
  * Vo that is pageable
  * <p>
  * Internally contains a {@link #pagingVo } for pagination
- * </p>
+ * <p>
  *
  * @author yongjie.zhuang
+ * @see PageableList
  */
 @Data
 public class PageableVo<T> implements Serializable {
@@ -33,18 +34,17 @@ public class PageableVo<T> implements Serializable {
     /**
      * Nullable Payload
      * <p>
-     * it's always serialized or deserialized using the name 'payload' (for backward compatibility)
+     * it's always serialized or deserialized using the name 'payload'
      * </p>
      */
-    @JsonProperty(value = "payload")
-    private T data = null;
+    private T payload = null;
 
     /**
      * Check whether data is present
      */
     @JsonIgnore
-    public boolean isDataPresent() {
-        return data != null;
+    public boolean isPayloadPresent() {
+        return payload != null;
     }
 
     /**
@@ -53,8 +53,8 @@ public class PageableVo<T> implements Serializable {
     @JsonIgnore
     public void onDataPresent(Consumer<T> consumer) {
         Assert.notNull(consumer, "consumer == null");
-        if (isDataPresent())
-            consumer.accept(data);
+        if (isPayloadPresent())
+            consumer.accept(payload);
     }
 
     /**
@@ -62,7 +62,7 @@ public class PageableVo<T> implements Serializable {
      */
     @JsonIgnore
     public void onDataNotPresent(Runnable r) {
-        if (!isDataPresent() && r != null)
+        if (!isPayloadPresent() && r != null)
             r.run();
     }
 
