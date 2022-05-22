@@ -16,6 +16,7 @@ import static com.curtisnewbie.common.util.PagingUtil.forIPage;
 public class PageableList<T> extends PageableVo<List<T>> {
 
     public static <T> PageableList<T> from(IPage<T> page) {
+        if (page == null) return null;
         PageableList<T> p = new PageableList<>();
         p.setPayload(page.getRecords());
         p.setPagingVo(forIPage(page));

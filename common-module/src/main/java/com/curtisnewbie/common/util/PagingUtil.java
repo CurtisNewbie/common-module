@@ -27,7 +27,28 @@ public final class PagingUtil {
     }
 
     /**
-     * Convert type and wrap result in a {@link PageableVo} which internally contains a {@link PagingVo}
+     * Convert type of payload
+     *
+     * @param from      source object page info
+     * @param converter function that converts object in T type to V type
+     * @param <T>       target's generic type
+     * @param <V>       source's generic type
+     * @return pageInfo of targetType
+     */
+    public static <T, V> PageableList<V> convertPayload(PageableList<T> from, Function<T, V> converter) {
+        if (from == null) return new PageableList<>();
+
+        final PageableList<V> to = new PageableList<>();
+        to.setPagingVo(from.getPagingVo());
+        from.onPayloadPresent(payload ->
+                to.setPayload(payload.stream()
+                        .map(converter)
+                        .collect(Collectors.toList())));
+        return to;
+    }
+
+    /**
+     * Build {@link PageableList}
      *
      * @param srcPageInfo source object page info
      * @param converter   function that converts object in T type to V type
@@ -39,17 +60,18 @@ public final class PagingUtil {
         if (srcPageInfo == null) return new PageableList<>();
         final PageableList<V> p = new PageableList<>();
         p.setPagingVo(forIPage(srcPageInfo));
-        p.setPayload(
-                srcPageInfo.getRecords()
-                        .stream()
-                        .map(converter)
-                        .collect(Collectors.toList())
-        );
+        if (srcPageInfo.getRecords() != null)
+            p.setPayload(
+                    srcPageInfo.getRecords()
+                            .stream()
+                            .map(converter)
+                            .collect(Collectors.toList())
+            );
         return p;
     }
 
     /**
-     * Wrap result in a {@link PageableVo} which internally contains a {@link PagingVo}
+     * Build {@link PageableList} from {@link IPage}
      */
     public static <T, V> PageableList<V> toPageableList(IPage<V> page) {
         if (page == null) return new PageableList<>();
