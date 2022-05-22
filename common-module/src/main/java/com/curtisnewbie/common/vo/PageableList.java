@@ -1,6 +1,7 @@
 package com.curtisnewbie.common.vo;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import java.util.List;
@@ -14,7 +15,7 @@ import static com.curtisnewbie.common.util.PagingUtil.forIPage;
  */
 public class PageableList<T> extends PageableVo<List<T>> {
 
-    public static <T> PageableList<T> from(Page<T> page) {
+    public static <T> PageableList<T> from(IPage<T> page) {
         PageableList<T> p = new PageableList<>();
         p.setPayload(page.getRecords());
         p.setPagingVo(forIPage(page));

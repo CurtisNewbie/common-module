@@ -37,6 +37,7 @@ public class PageableVo<T> implements Serializable {
      * it's always serialized or deserialized using the name 'payload'
      * </p>
      */
+    @JsonProperty(value = "payload")
     private T payload = null;
 
     /**
@@ -48,10 +49,10 @@ public class PageableVo<T> implements Serializable {
     }
 
     /**
-     * Consumer invoked when data is present
+     * Consumer invoked when payload is present
      */
     @JsonIgnore
-    public void onDataPresent(Consumer<T> consumer) {
+    public void onPayloadPresent(Consumer<T> consumer) {
         Assert.notNull(consumer, "consumer == null");
         if (isPayloadPresent())
             consumer.accept(payload);
@@ -61,7 +62,7 @@ public class PageableVo<T> implements Serializable {
      * Consumer invoked when data is absent
      */
     @JsonIgnore
-    public void onDataNotPresent(Runnable r) {
+    public void onPayloadNotPresent(Runnable r) {
         if (!isPayloadPresent() && r != null)
             r.run();
     }

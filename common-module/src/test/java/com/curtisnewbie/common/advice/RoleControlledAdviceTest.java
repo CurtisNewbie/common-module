@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
  */
 @EnableRoleControl
 @SpringBootApplication(scanBasePackages = "com.curtisnewbie.common.advice")
-@SpringBootTest(classes = RoleCotrolledAdviceTest.class)
-public class RoleCotrolledAdviceTest {
+@SpringBootTest(classes = RoleControlledAdviceTest.class)
+public class RoleControlledAdviceTest {
 
     @Autowired
     private Dummy dummy;

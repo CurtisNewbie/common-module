@@ -2,12 +2,10 @@ package com.curtisnewbie.common.util;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.curtisnewbie.common.vo.PageablePayloadSingleton;
+import com.curtisnewbie.common.vo.PageableList;
 import com.curtisnewbie.common.vo.PageableVo;
 import com.curtisnewbie.common.vo.PagingVo;
-import org.springframework.util.Assert;
 
-import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -29,7 +27,7 @@ public final class PagingUtil {
     }
 
     /**
-     * Convert type and wrap result in a {@link PageablePayloadSingleton} which internally contains a {@link PagingVo}
+     * Convert type and wrap result in a {@link PageableVo} which internally contains a {@link PagingVo}
      *
      * @param srcPageInfo source object page info
      * @param converter   function that converts object in T type to V type
@@ -37,83 +35,25 @@ public final class PagingUtil {
      * @param <V>         source's generic type
      * @return pageInfo of targetType
      */
-    public static <T, V> PageablePayloadSingleton<List<V>> toPageList(IPage<T> srcPageInfo, Function<T, V> converter) {
-        PageablePayloadSingleton payloadSingleton = new PageablePayloadSingleton();
-        if (srcPageInfo == null) {
-            return payloadSingleton;
-        }
-        // cast to int for backward compatibility
-        payloadSingleton.setPagingVo(
-                new PagingVo()
-                        .ofPage((int) srcPageInfo.getCurrent())
-                        .ofTotal(srcPageInfo.getTotal())
-        );
-        payloadSingleton.setPayload(
-                srcPageInfo.getRecords()
-                        .stream()
-                        .map(converter::apply)
-                        .collect(Collectors.toList())
-        );
-        return payloadSingleton;
-    }
-
-    /**
-     * Convert type and wrap result in a {@link com.curtisnewbie.common.vo.PageableVo} which internally contains a
-     * {@link PagingVo}
-     *
-     * @param srcPageInfo source object page info
-     * @param converter   function that converts object in T type to V type
-     * @param <T>         target's generic type
-     * @param <V>         source's generic type
-     * @return pageInfo of targetType
-     */
-    public static <T, V> PageableVo<List<V>> toPageable(IPage<T> srcPageInfo, Function<T, V> converter) {
-        if (srcPageInfo == null) {
-            return new PageableVo();
-        }
-        final PageableVo<List<V>> p = new PageableVo<>();
+    public static <T, V> PageableList<V> toPageableList(IPage<T> srcPageInfo, Function<T, V> converter) {
+        if (srcPageInfo == null) return new PageableList<>();
+        final PageableList<V> p = new PageableList<>();
         p.setPagingVo(forIPage(srcPageInfo));
         p.setPayload(
                 srcPageInfo.getRecords()
                         .stream()
-                        .map(converter::apply)
+                        .map(converter)
                         .collect(Collectors.toList())
         );
         return p;
     }
 
     /**
-     * Wrap result in a {@link com.curtisnewbie.common.vo.PageableVo} which internally contains a
-     * {@link PagingVo}
+     * Wrap result in a {@link PageableVo} which internally contains a {@link PagingVo}
      */
-    public static <T, V> PageableVo<List<V>> toPageable(IPage<V> srcPageInfo) {
-        if (srcPageInfo == null) {
-            return new PageableVo();
-        }
-        final PageableVo<List<V>> p = new PageableVo<>();
-        p.setPagingVo(forIPage(srcPageInfo));
-        p.setPayload(srcPageInfo.getRecords());
-        return p;
-    }
-
-    /**
-     * Convert PageableVo with given converter
-     */
-    public static <T, V> PageableVo<List<V>> convert(PageableVo<List<T>> srcPv, Function<T, V> converter) {
-        if (srcPv == null) {
-            return new PageableVo();
-        }
-        final PageableVo<List<V>> p = new PageableVo<>();
-        p.setPagingVo(srcPv.getPagingVo());
-        if (srcPv.getPayload() != null) {
-            p.setPayload(
-                    srcPv.getPayload()
-                            .stream()
-                            .map(converter::apply)
-                            .collect(Collectors.toList())
-            );
-        }
-        return p;
+    public static <T, V> PageableList<V> toPageableList(IPage<V> page) {
+        if (page == null) return new PageableList<>();
+        return PageableList.from(page);
     }
 
     /**
@@ -123,13 +63,13 @@ public final class PagingUtil {
      * @param limit   page size
      */
     public static <T> Page<T> forPage(int pageNum, int limit) {
-        return new Page(pageNum, limit);
+        return new Page<>(pageNum, limit);
     }
 
     /**
      * Construct {@link PagingVo} based on given {@link IPage}
      */
-    public static PagingVo forIPage(IPage p) {
+    public static PagingVo forIPage(IPage<?> p) {
         if (p == null) return null;
 
         return new PagingVo()
@@ -144,31 +84,5 @@ public final class PagingUtil {
      */
     public static <T> Page<T> forPage(PagingVo pv) {
         return forPage(pv.getPage(), pv.getLimit());
-    }
-
-    /**
-     * Same as {@link PagingUtil#toPageable(IPage, Function)}, but different style of coding and potentially better
-     * readability (especially if lots of lambda expression are used)
-     */
-    public static class PageableVoConstructor<T, V> {
-
-        private IPage<T> srcPageInfo;
-        private Function<T, V> converter;
-
-        public PageableVoConstructor<T, V> setSrcPageInfo(IPage<T> srcPageInfo) {
-            this.srcPageInfo = srcPageInfo;
-            return this;
-        }
-
-        public PageableVoConstructor<T, V> setConverter(Function<T, V> converter) {
-            this.converter = converter;
-            return this;
-        }
-
-        public PageableVo<List<V>> convertAndBuild() {
-            Assert.notNull(srcPageInfo, "srcPageInfo == null");
-            Assert.notNull(converter, "converter == null");
-            return toPageable(srcPageInfo, converter);
-        }
     }
 }
