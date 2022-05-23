@@ -15,7 +15,7 @@ import static com.curtisnewbie.common.trace.TraceUtils.*;
  * <p>
  * See {@link #defaultExceptionHandler()} for default exception handler
  * <p>
- * See {@link #defaultExecutor()} and {@link #defaultExecutor(int, int)} for default executor service
+ * See {@link #defaultExecutor()} and {@link #fixedExecutor(int, int)} for default executor service
  *
  * @author yongj.zhuang
  */
@@ -79,24 +79,10 @@ public class EventPool {
     }
 
     /**
-     * Fixed core size: 4, queue size: 500, with DiscardPolicy
+     * {@link ForkJoinPool#commonPool()}
      */
     public static ExecutorService defaultExecutor() {
-        return defaultExecutor(4, 500);
-    }
-
-    /**
-     * Fixed core size with DiscardPolicy
-     */
-    public static ExecutorService defaultExecutor(int coreSize, int queueSize) {
-        return new ThreadPoolExecutor(
-                coreSize,
-                coreSize,
-                0,
-                TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<>(queueSize),
-                new ThreadPoolExecutor.DiscardPolicy()
-        );
+        return ForkJoinPool.commonPool();
     }
 
     public static Consumer<Throwable> defaultExceptionHandler() {
