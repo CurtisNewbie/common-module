@@ -4,9 +4,15 @@ import com.curtisnewbie.common.util.*;
 import org.apache.poi.ss.usermodel.*;
 
 import java.io.*;
+import java.util.List;
 
 /**
  * Generator of Excel file
+ * <p>
+ * Subclasses will need to implement the following method:
+ * <ul>
+ *  <li>{@link #generate(List)} method that writes the content to the workbook (same one returned by {@link #getWorkbook()})</li>
+ * </ul>
  *
  * @author yongj.zhuang
  */
@@ -24,7 +30,7 @@ public interface ExcelGenerator<T> {
     /**
      * Generate content and write to OutputStream
      */
-    default void generateAndWrite(T t, OutputStream out) throws IOException {
+    default void generateAndWrite(List<T> t, OutputStream out) throws IOException {
         generate(t);
         write(out);
     }
@@ -32,7 +38,7 @@ public interface ExcelGenerator<T> {
     /**
      * Generate content
      */
-    void generate(T t);
+    void generate(List<T> t);
 
     /**
      * Get workbook
