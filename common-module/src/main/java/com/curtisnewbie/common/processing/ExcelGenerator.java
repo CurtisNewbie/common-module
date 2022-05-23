@@ -36,7 +36,7 @@ public interface ExcelGenerator<T> {
     }
 
     /**
-     * Generate content
+     * Generate content to the workbook
      */
     void generate(List<T> t);
 
