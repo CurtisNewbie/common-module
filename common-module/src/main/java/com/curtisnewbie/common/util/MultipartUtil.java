@@ -18,7 +18,7 @@ public final class MultipartUtil {
     private MultipartUtil() {
     }
 
-    /** 组装 MultipartFile, 不需要创建临时文件 */
+    /** Build MultipartFile from provided InputStream */
     public static MultipartFile toMultipartFile(InputStream inputStream, String fileName) throws IOException {
         FileItem fileItem = new DiskFileItemFactory().createItem("file", "*/*", Boolean.TRUE, fileName);
         IOUtils.copy(inputStream, fileItem.getOutputStream());
