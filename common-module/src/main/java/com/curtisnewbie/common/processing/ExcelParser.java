@@ -4,6 +4,7 @@ import com.curtisnewbie.common.util.*;
 import org.apache.poi.ss.usermodel.*;
 
 import java.io.*;
+import java.util.*;
 
 /**
  * Parser
@@ -13,9 +14,9 @@ import java.io.*;
 public interface ExcelParser<T> {
 
     /**
-     * Parse file
+     * Parse excel file
      */
-    T parse(InputStream inputStream) throws IOException;
+    List<T> parse(InputStream inputStream) throws IOException;
 
     /**
      * Create Workbook

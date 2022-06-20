@@ -8,10 +8,12 @@ import org.springframework.util.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.function.*;
 import java.util.stream.*;
 
 import static com.curtisnewbie.common.util.AssertUtils.*;
+import static com.curtisnewbie.common.util.ExceptionUtils.*;
 import static com.curtisnewbie.common.util.OptionalUtils.*;
 import static com.curtisnewbie.common.util.ReflectUtils.*;
 
@@ -255,6 +257,72 @@ public final class ExcelUtils {
         final Row row = sheet.createRow(rowIndex);
         row.setHeight(DEF_CELL_HEIGHT);
         return row;
+    }
+
+    /**
+     * Parse Excel Rows of data, all fields of {@code tclz} must be of String type
+     */
+    public static <T> List<T> parseExcelData(Workbook workbook, Class<T> tclz) {
+        Assert.notNull(workbook, "workbook == null");
+        Assert.notNull(tclz, "tclz == null");
+
+        final int cnt = workbook.getNumberOfSheets();
+        if (cnt < 1) return new ArrayList<>();
+
+        final List<AnnotatedExcelColumn> cols = parseExcelFields(tclz);
+        if (cols.isEmpty()) return new ArrayList<>();
+
+        final Map<String /* column name */, Field> fmap = new HashMap<>();
+        for (final AnnotatedExcelColumn aec : cols) {
+            final Field field = aec.getField();
+            field.setAccessible(true);
+            fmap.put(aec.getDisplayedColumnName(), field);
+        }
+
+        // only parse the first sheet
+        final Sheet fstSheet = workbook.getSheetAt(0);
+        int rowPtr = 0;
+
+        final FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
+
+        // first row
+        Row row = fstSheet.getRow(rowPtr++);
+        if (row == null) return new ArrayList<>();
+        final List<String> titles = extractRowValues(row, formulaEvaluator);
+        if (titles.isEmpty()) return new ArrayList<>();
+
+        // only record the titles that we have
+        final Map<String /* title */, Integer /* index */> idxMap = new HashMap<>();
+        for (int i = 0; i < titles.size(); i++) {
+            idxMap.put(titles.get(i), i);
+        }
+
+        final Constructor<T> defConstr = throwIfError((Callable<Constructor<T>>) tclz::getDeclaredConstructor);
+        final List<T> data = new ArrayList<>();
+
+        while ((row = fstSheet.getRow(rowPtr++)) != null) {
+            final List<String> values = extractRowValues(row, formulaEvaluator);
+            final T t = throwIfError((Callable<T>) defConstr::newInstance);
+            idxMap.forEach((key, idx) -> {
+                final Field field = fmap.get(key);
+                final String value = values.get(idx);
+                if (field != null && value != null) {
+                    throwIfError(() -> field.set(t, value));
+                }
+            });
+            data.add(t);
+        }
+        return data;
+    }
+
+    public static List<String> extractRowValues(Row row, FormulaEvaluator formulaEvaluator) {
+        DataFormatter formatter = new DataFormatter();
+        List<String> val = new ArrayList<>();
+        for (Cell cell : row) {
+            // todo not just supports string, but also other primitive types
+            val.add(formatter.formatCellValue(cell, formulaEvaluator));
+        }
+        return val;
     }
 
     @Data

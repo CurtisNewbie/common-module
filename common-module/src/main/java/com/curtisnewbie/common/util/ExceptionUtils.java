@@ -27,7 +27,7 @@ public final class ExceptionUtils {
     /**
      * Wrap the Runnable, and throws IllegalStateException if necessary
      */
-    public static void throwIfError(Runnable r) throws IllegalStateException {
+    public static void throwIfError(ThrowableRunnable r) throws IllegalStateException {
         try {
             r.run();
         } catch (Throwable e) {
