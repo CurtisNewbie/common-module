@@ -40,7 +40,6 @@ public class RoleControlledAdvice {
         final TUser tUser = TraceUtils.tUser();
         final String role = tUser.getRole();
 
-        // validate role before proceed
         final String required = roleControlled.rolesRequired();
         if (StringUtils.hasText(required) && !roles(required).contains(role)) {
             log.warn("Operation '{}' not permitted, roles '{}' are required, user's role: '{}'", pjp.getSignature(), required, role);

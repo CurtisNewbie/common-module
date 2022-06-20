@@ -15,7 +15,7 @@ import static com.curtisnewbie.common.trace.TraceUtils.*;
  * <p>
  * See {@link #defaultExceptionHandler()} for default exception handler
  * <p>
- * See {@link #defaultExecutor()} and {@link #fixedExecutor(int, int)} for default executor service
+ * See {@link #defaultExecutor()} for default executor service
  *
  * @author yongj.zhuang
  */
