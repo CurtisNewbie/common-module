@@ -64,6 +64,11 @@ public final class TraceUtils {
         return tUser.get();
     }
 
+    /** Check whether current request is authenticated by a user */
+    public static boolean isLoggedIn() {
+        return get(USER_ID) != null;
+    }
+
     /** Build nullable TUser from the trace info */
     public static Optional<TUser> nullableTUser() {
         final String id = get(USER_ID);
