@@ -1,5 +1,7 @@
 package com.curtisnewbie.common.util;
 
+import java.util.concurrent.*;
+
 /**
  * Exception Utils
  *
@@ -9,6 +11,28 @@ public final class ExceptionUtils {
 
     private ExceptionUtils() {
 
+    }
+
+    /**
+     * Wrap the callable, and throws IllegalStateException if necessary
+     */
+    public static <V> V throwIfError(Callable<V> callable) throws IllegalStateException {
+        try {
+            return callable.call();
+        } catch (Throwable e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    /**
+     * Wrap the Runnable, and throws IllegalStateException if necessary
+     */
+    public static void throwIfError(Runnable r) throws IllegalStateException {
+        try {
+            r.run();
+        } catch (Throwable e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     /**
