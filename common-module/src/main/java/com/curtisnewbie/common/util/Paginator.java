@@ -49,12 +49,12 @@ public final class Paginator<T> {
     /** consumer of page size after {@link #_doForEach(Consumer)} */
     private Consumer<Integer> onCurrentPageComplete = null;
     /** Timer (nullable) */
-    private Timer timer = null;
+    private LDTTimer timer = null;
 
     /** set whether the looping is timed */
     public Paginator<T> isTimed(boolean isTimed) {
         if (isTimed)
-            timer = new Timer();
+            timer = new LDTTimer();
         return this;
     }
 
@@ -185,7 +185,7 @@ public final class Paginator<T> {
      * @return timer or null if it's not "timed"
      */
     @Nullable
-    public Timer getTimer() {
+    public LDTTimer getTimer() {
         return timer;
     }
 

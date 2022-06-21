@@ -13,14 +13,14 @@ import java.time.*;
  *
  * @author yongj.zhuang
  */
-public class Timer {
+public class LDTTimer {
 
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
     /** Get a new timer and start it */
-    public static Timer startTimer() {
-        Timer t = new Timer();
+    public static LDTTimer startTimer() {
+        LDTTimer t = new LDTTimer();
         t.start();
         return t;
     }
