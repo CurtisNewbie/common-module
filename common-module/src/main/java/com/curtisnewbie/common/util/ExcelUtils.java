@@ -7,6 +7,7 @@ import org.springframework.util.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
@@ -16,6 +17,7 @@ import static com.curtisnewbie.common.util.AssertUtils.*;
 import static com.curtisnewbie.common.util.ExceptionUtils.*;
 import static com.curtisnewbie.common.util.OptionalUtils.*;
 import static com.curtisnewbie.common.util.ReflectUtils.*;
+import static java.lang.Integer.*;
 
 /**
  * Excel Utils
@@ -293,23 +295,41 @@ public final class ExcelUtils {
 
         // only record the titles that we have
         final Map<String /* title */, Integer /* index */> idxMap = new HashMap<>();
-        for (int i = 0; i < titles.size(); i++) {
+        for (int i = 0; i < titles.size(); i++)
             idxMap.put(titles.get(i), i);
-        }
 
         final Constructor<T> defConstr = throwIfError((Callable<Constructor<T>>) tclz::getDeclaredConstructor);
         final List<T> data = new ArrayList<>();
 
+        final DataFormatter fmtr = new DataFormatter();
         while ((row = fstSheet.getRow(rowPtr++)) != null) {
-            final List<String> values = extractRowValues(row, formulaEvaluator);
             final T t = throwIfError((Callable<T>) defConstr::newInstance);
-            idxMap.forEach((key, idx) -> {
+
+            for (Map.Entry<String, Integer> entry : idxMap.entrySet()) {
+                String key = entry.getKey();
+                Integer idx = entry.getValue();
+
                 final Field field = fmap.get(key);
-                final String value = values.get(idx);
-                if (field != null && value != null) {
-                    throwIfError(() -> field.set(t, value));
+                if (field == null) continue; // it's not a field in T class
+
+                final Class<?> type = field.getType();
+                final Cell cell = row.getCell(idx, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
+                if (cell == null) continue; // the cell is blank or null
+
+                Object val = null;
+                if (type.isAssignableFrom(Integer.class)) val = parseInt(fmtr.formatCellValue(cell, formulaEvaluator));
+                else if (type.isAssignableFrom(Double.class)) val = cell.getNumericCellValue();
+                else if (type.isAssignableFrom(Float.class)) val = cell.getNumericCellValue();
+                else if (type.isAssignableFrom(String.class)) val = fmtr.formatCellValue(cell, formulaEvaluator);
+                else if (type.isAssignableFrom(LocalDateTime.class)) val = cell.getLocalDateTimeCellValue();
+                else if (type.isAssignableFrom(Date.class)) val = cell.getDateCellValue();
+                else if (type.isAssignableFrom(Boolean.class)) val = cell.getBooleanCellValue();
+
+                if (val != null) {
+                    final Object fieldValue = val;
+                    throwIfError(() -> field.set(t, fieldValue));
                 }
-            });
+            }
             data.add(t);
         }
         return data;
@@ -319,7 +339,6 @@ public final class ExcelUtils {
         DataFormatter formatter = new DataFormatter();
         List<String> val = new ArrayList<>();
         for (Cell cell : row) {
-            // todo not just supports string, but also other primitive types
             val.add(formatter.formatCellValue(cell, formulaEvaluator));
         }
         return val;

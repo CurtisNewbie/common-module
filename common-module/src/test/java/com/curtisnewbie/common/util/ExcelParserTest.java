@@ -6,6 +6,7 @@ import lombok.extern.slf4j.*;
 import org.junit.jupiter.api.*;
 
 import java.io.*;
+import java.time.*;
 import java.util.*;
 
 /**
@@ -28,9 +29,13 @@ public class ExcelParserTest {
         @ExcelCol("Name")
         private String name;
         @ExcelCol("Age")
-        private String age;
+        private Integer age;
         @ExcelCol("Title")
         private String title;
+        @ExcelCol("A Nice Guy")
+        private Boolean aNiceGuy;
+        @ExcelCol("Birth")
+        private LocalDateTime birth;
     }
 
     public static class DDummyExcelParser extends AbstractExcelParser<DDummy> {
