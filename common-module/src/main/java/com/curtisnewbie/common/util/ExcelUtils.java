@@ -7,6 +7,7 @@ import org.springframework.util.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.math.*;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -263,6 +264,19 @@ public final class ExcelUtils {
 
     /**
      * Parse Excel Rows of data, all fields of {@code tclz} must be of String type
+     * <p>
+     * Supports following data types:
+     * <ul>
+     *    <li>Integer</li>
+     *    <li>Double</li>
+     *    <li>Float</li>
+     *    <li>String</li>
+     *    <li>LocalDateTime</li>
+     *    <li>Date</li>
+     *    <li>Boolean</li>
+     *    <li>BigInteger</li>
+     *    <li>BigDecimal</li>
+     * </ul>
      */
     public static <T> List<T> parseExcelData(Workbook workbook, Class<T> tclz) {
         Assert.notNull(workbook, "workbook == null");
@@ -324,6 +338,13 @@ public final class ExcelUtils {
                 else if (type.isAssignableFrom(LocalDateTime.class)) val = cell.getLocalDateTimeCellValue();
                 else if (type.isAssignableFrom(Date.class)) val = cell.getDateCellValue();
                 else if (type.isAssignableFrom(Boolean.class)) val = cell.getBooleanCellValue();
+                else if (type.isAssignableFrom(BigInteger.class)) {
+                    final String sv = fmtr.formatCellValue(cell, formulaEvaluator);
+                    if (StringUtils.hasText(sv)) val = new BigInteger(sv);
+                } else if (type.isAssignableFrom(BigDecimal.class)) {
+                    final String sv = fmtr.formatCellValue(cell, formulaEvaluator);
+                    if (StringUtils.hasText(sv)) val = new BigDecimal(sv);
+                }
 
                 if (val != null) {
                     final Object fieldValue = val;
