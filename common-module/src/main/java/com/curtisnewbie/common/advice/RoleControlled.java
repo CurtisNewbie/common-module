@@ -7,6 +7,8 @@ import java.lang.annotation.*;
 /**
  * Role Control for the execution of the annotation method
  * <p>
+ * Without specifying {@link #rolesForbidden()} and {@link #rolesRequired()}, only the request authentication is validated
+ * <p>
  * This relies on the {@link RoleControlledAdvice} and {@link TraceUtils#tUser()}
  *
  * @see TraceUtils#tUser()
