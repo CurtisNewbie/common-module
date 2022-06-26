@@ -263,7 +263,7 @@ public final class ExcelUtils {
     }
 
     /**
-     * Parse Excel Rows of data, all fields of {@code tclz} must be of String type
+     * Parse Excel Rows of data
      * <p>
      * Supports following data types:
      * <ul>
