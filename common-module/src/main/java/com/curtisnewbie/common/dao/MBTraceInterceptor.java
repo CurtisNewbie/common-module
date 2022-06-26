@@ -43,6 +43,7 @@ public class MBTraceInterceptor implements Interceptor {
         return exec.update(ms, param);
     }
 
+    @SuppressWarnings("unchecked")
     private void doPreProcessing(MappedStatement ms, Object param) {
         if (param == null) return;
 

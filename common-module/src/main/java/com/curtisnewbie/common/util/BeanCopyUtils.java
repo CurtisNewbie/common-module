@@ -9,6 +9,8 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static com.curtisnewbie.common.util.ExceptionUtils.*;
+
 /**
  * Utilities to copy bean's properties
  *
@@ -22,7 +24,7 @@ public final class BeanCopyUtils {
     /**
      * Copy properties, and convert to the given type
      *
-     * @param source     source object, it should be classic POJO(e.g., it shouldn't be instance of {@link Collection})
+     * @param source     source object, it should be classic POJO(e.g., it shouldn't be an instance of {@link Collection})
      * @param targetType targetType
      * @param <T>        target's generic type
      * @param <V>        source's generic type
@@ -33,18 +35,15 @@ public final class BeanCopyUtils {
         if (source == null) {
             return null;
         }
-        // source shouldn't be object of List
-        if (source instanceof Collection) {
-            throw new IllegalStateException("T is a Collection, which is not supported");
-        }
-        V v;
         try {
-            v = targetType.getDeclaredConstructor().newInstance();
+            final V v = targetType.getDeclaredConstructor().newInstance();
+            BeanUtils.copyProperties(source, v);
+            return v;
+        } catch (NoSuchMethodException e) {
+            throw illegalState(e, "Failed to convert bean to type: %s, default constructor is not found", targetType);
         } catch (ReflectiveOperationException e) {
-            throw new IllegalStateException("Failed to convert bean", e);
+            throw illegalState(e, "Failed to convert bean from %s to type: %s", source.getClass(), targetType);
         }
-        BeanUtils.copyProperties(source, v);
-        return v;
     }
 
     /**

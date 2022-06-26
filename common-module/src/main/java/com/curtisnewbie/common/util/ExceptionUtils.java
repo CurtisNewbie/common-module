@@ -16,7 +16,7 @@ public final class ExceptionUtils {
     /**
      * Wrap the callable, and throws IllegalStateException if necessary
      */
-    public static <V> V throwIfError(Callable<V> callable) throws IllegalStateException {
+    public static <V> V throwIfError(Callable<V> callable) {
         try {
             return callable.call();
         } catch (Throwable e) {
@@ -27,7 +27,7 @@ public final class ExceptionUtils {
     /**
      * Wrap the Runnable, and throws IllegalStateException if necessary
      */
-    public static void throwIfError(ThrowableRunnable r) throws IllegalStateException {
+    public static void throwIfError(ThrowableRunnable r) {
         try {
             r.run();
         } catch (Throwable e) {
@@ -36,16 +36,30 @@ public final class ExceptionUtils {
     }
 
     /**
-     * Throw IllegalStateException with a formatted message
+     * Return IllegalStateException with a formatted message
      */
-    public static IllegalStateException throwIllegalState(String pattern, Object... args) throws IllegalStateException {
-        throw new IllegalStateException(String.format(pattern, args));
+    public static IllegalStateException illegalState(Throwable t, String pattern, Object... args) {
+        return new IllegalStateException(String.format(pattern, args), t);
     }
 
     /**
-     * Throw IllegalArgumentException with a formatted message
+     * Return IllegalStateException with a formatted message
      */
-    public static void throwIllegalArgument(String pattern, Object... args) throws IllegalArgumentException {
+    public static IllegalStateException illegalState(String pattern, Object... args) {
+        return new IllegalStateException(String.format(pattern, args));
+    }
+
+    /**
+     * Return IllegalArgumentException with a formatted message
+     */
+    public static IllegalArgumentException illegalArgument(String pattern, Object... args) {
         throw new IllegalArgumentException(String.format(pattern, args));
+    }
+
+    /**
+     * Return IllegalArgumentException with a formatted message
+     */
+    public static IllegalArgumentException illegalArgument(Throwable t, String pattern, Object... args) {
+        throw new IllegalArgumentException(String.format(pattern, args), t);
     }
 }

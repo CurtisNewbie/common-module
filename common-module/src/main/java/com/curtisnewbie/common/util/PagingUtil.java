@@ -27,6 +27,31 @@ public final class PagingUtil {
     }
 
     /**
+     * Concatenate 'LIMIT $offset, $limit' string
+     */
+    public static String limit(PagingVo p) {
+        final long page = p.getPage();
+        final long limit = p.getLimit();
+        final long offset = page <= 0 ? 0 : (page - 1L) * limit;
+        return limit(offset, limit);
+    }
+
+    /**
+     * Convert type of payload
+     * <p>
+     * Conversion is achieved automatically using {@link BeanCopyUtils#toType(Object, Class)}
+     *
+     * @param from      source object page info
+     * @param targetClz target class
+     * @param <T>       target's generic type
+     * @param <V>       source's generic type
+     * @return pageInfo of targetType
+     */
+    public static <T, V> PageableList<V> convertPayload(PageableList<T> from, Class<V> targetClz) {
+        return convertPayload(from, t -> BeanCopyUtils.toType(t, targetClz));
+    }
+
+    /**
      * Convert type of payload
      *
      * @param from      source object page info
