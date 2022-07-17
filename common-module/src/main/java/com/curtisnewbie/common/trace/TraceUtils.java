@@ -22,6 +22,7 @@ public final class TraceUtils {
     public static final String USER_ID = "id";
     public static final String USERNAME = "username";
     public static final String USER_ROLE = "role";
+    public static final String USER_NO = "userno";
     public static final String SERVICES = "services";
 
     private TraceUtils() {
@@ -50,9 +51,11 @@ public final class TraceUtils {
         Assert.notNull(tu, "tUser == null");
         Assert.notNull(tu.getUsername(), "tUser.username == null");
         Assert.notNull(tu.getRole(), "tUser.role == null");
+        Assert.notNull(tu.getUserNo(), "tUser.userNo == null");
 
         put(USER_ID, String.valueOf(tu.getUserId()));
         put(USERNAME, tu.getUsername());
+        put(USER_NO, tu.getUserNo());
         put(USER_ROLE, tu.getRole());
         put(SERVICES, tu.getServices() != null ? join(",", tu.getServices()) : "");
     }
@@ -82,6 +85,7 @@ public final class TraceUtils {
                 .userId(Integer.parseInt(id))
                 .username(get(USERNAME))
                 .role(get(USER_ROLE))
+                .userNo(get(USER_NO))
                 .services(asList(ss.split(",")))
                 .build());
     }

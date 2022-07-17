@@ -20,6 +20,8 @@ public class TUser {
 
     private final String username;
 
+    private final String userNo;
+
     private final String role;
 
     private final List<String> services;
