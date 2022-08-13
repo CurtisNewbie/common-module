@@ -45,7 +45,7 @@ public final class UrlUtils {
      * <p>
      * if index is greater than the total number of segments, null is returned
      *
-     * @return segment that starts with the prefix
+     * @return segment with the prefix that is concatenated to it
      */
     public static String segment(int index, String path, String prefix) {
         Assert.notNull(prefix, "prefix == null");

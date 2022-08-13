@@ -79,10 +79,10 @@ public class EventPool {
     }
 
     /**
-     * {@link ForkJoinPool#commonPool()}
+     * Default Executor Service (internally, it creates a WorkStealingPool, parallelism = number_of_processors )
      */
     public static ExecutorService defaultExecutor() {
-        return ForkJoinPool.commonPool();
+        return Executors.newWorkStealingPool();
     }
 
     public static Consumer<Throwable> defaultExceptionHandler() {
