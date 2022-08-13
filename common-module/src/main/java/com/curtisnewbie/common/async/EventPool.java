@@ -4,6 +4,8 @@ import brave.*;
 import lombok.extern.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
+import org.springframework.lang.*;
+import org.springframework.util.*;
 
 import java.util.concurrent.*;
 import java.util.function.*;
@@ -24,27 +26,27 @@ public class EventPool {
 
     private final ExecutorService executorService;
     private final Consumer<Throwable> exceptionHandler;
+    private final ApplicationEventPublisher eventPublisher;
 
-    @Autowired
-    private Tracer tracer;
-    @Autowired
-    private ApplicationEventPublisher eventPublisher;
+    @Nullable
+    private final Tracer tracer;
 
-    public EventPool() {
-        this(defaultExecutor(), defaultExceptionHandler());
+    public EventPool(ApplicationEventPublisher applicationEventPublisher, @Nullable Tracer tracer) {
+        this(defaultExecutor(), defaultExceptionHandler(), applicationEventPublisher, tracer);
     }
 
-    public EventPool(ExecutorService executorService, Consumer<Throwable> exceptionHandler) {
+    public EventPool(ExecutorService executorService, Consumer<Throwable> exceptionHandler,
+                     ApplicationEventPublisher applicationEventPublisher,
+                     @Nullable Tracer tracer) {
+
+        Assert.notNull(applicationEventPublisher, "ApplicationEventPublisher is null");
+        if (executorService == null) executorService = defaultExecutor();
+        if (exceptionHandler == null) exceptionHandler = defaultExceptionHandler();
+
         this.executorService = executorService;
         this.exceptionHandler = exceptionHandler;
-    }
-
-    public EventPool(Consumer<Throwable> exceptionHandler) {
-        this(defaultExecutor(), exceptionHandler);
-    }
-
-    public EventPool(ExecutorService executorService) {
-        this(executorService, defaultExceptionHandler());
+        this.tracer = tracer;
+        this.eventPublisher = applicationEventPublisher;
     }
 
     /**
@@ -60,22 +62,20 @@ public class EventPool {
 
     // ------------------------------ private helper methods ---------------------
 
-    private void submit(Runnable r, Consumer<Throwable> exceptionHandler) {
+    private void submit(Runnable r) {
         try {
             CompletableFuture
-                    .runAsync(() -> runWithSpan(r, tracer), executorService)
+                    .runAsync(() -> {
+                        if (tracer != null) runWithSpan(r, tracer);
+                        else r.run();
+                    }, executorService)
                     .exceptionally(e -> {
-                        if (exceptionHandler != null)
-                            exceptionHandler.accept(e);
+                        if (exceptionHandler != null) exceptionHandler.accept(e);
                         return null;
                     });
         } catch (Exception e) {
             log.warn("EventPool.submit error", e);
         }
-    }
-
-    private void submit(Runnable r) {
-        submit(r, exceptionHandler);
     }
 
     /**
