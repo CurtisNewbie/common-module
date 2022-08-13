@@ -28,7 +28,7 @@ public class GlobalControllerAdvice {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public Result<?> handleGeneralException(Exception e) {
-        log.error("Unknown Exception occurred", e);
+        log.error("Unknown exception occurred", e);
         return Result.error("Unknown error, please try again later");
     }
 

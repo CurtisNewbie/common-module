@@ -118,13 +118,13 @@ public final class PagingUtil {
     public static PagingVo forIPage(IPage<?> p) {
         if (p == null) return null;
 
-        return ofPageAndCount((int) p.getCurrent(), p.getTotal());
+        return ofPageAndTotal((int) p.getCurrent(), p.getTotal());
     }
 
     /**
      * Construct {@link PagingVo} based on page and total number of records
      */
-    public static PagingVo ofPageAndCount(int page, long total) {
+    public static PagingVo ofPageAndTotal(int page, long total) {
         return new PagingVo()
                 .ofPage(page)
                 .ofTotal(total);
