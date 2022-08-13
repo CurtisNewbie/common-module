@@ -3,7 +3,6 @@ package com.curtisnewbie.common.util;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.curtisnewbie.common.vo.PageableList;
-import com.curtisnewbie.common.vo.PageableVo;
 import com.curtisnewbie.common.vo.PagingVo;
 
 import java.util.function.Function;
@@ -119,9 +118,16 @@ public final class PagingUtil {
     public static PagingVo forIPage(IPage<?> p) {
         if (p == null) return null;
 
+        return ofPageAndCount((int) p.getCurrent(), p.getTotal());
+    }
+
+    /**
+     * Construct {@link PagingVo} based on page and total number of records
+     */
+    public static PagingVo ofPageAndCount(int page, long total) {
         return new PagingVo()
-                .ofPage((int) p.getCurrent()) // cast to int for backward compatibility
-                .ofTotal(p.getTotal());
+                .ofPage(page)
+                .ofTotal(total);
     }
 
     /**
