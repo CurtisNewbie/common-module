@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * Result for REST Endpoints
@@ -24,25 +25,28 @@ public class Result<T> implements Serializable {
     /** whether current response has an error */
     private boolean error;
 
-    @Deprecated // todo change to error, so that we don't have a setter method called 'setHasError' :(
-    /** whether current response has an error */
-    private boolean hasError;
-
     /** data */
     private T data;
 
     public static <T> Result<T> ok() {
         Result<T> resp = new Result<T>();
-        resp.hasError = false;
         resp.error = false;
         resp.msg = "";
         resp.data = null;
         return resp;
     }
 
+    public static <T> Result<T> runThenOk(Runnable r) {
+        r.run();
+        return ok();
+    }
+
+    public static <T> Result<T> ofSupplied(Supplier<T> dataSupplier) {
+        return of(dataSupplier.get());
+    }
+
     public static <T> Result<T> of(T data) {
         Result<T> resp = new Result<T>();
-        resp.hasError = false;
         resp.error = false;
         resp.msg = null;
         resp.data = data;
@@ -51,7 +55,6 @@ public class Result<T> implements Serializable {
 
     public static <T> Result<T> error(String errMsg) {
         Result<T> resp = new Result<T>();
-        resp.hasError = true;
         resp.error = true;
         resp.msg = errMsg;
         resp.data = null;
@@ -60,7 +63,6 @@ public class Result<T> implements Serializable {
 
     public static <T> Result<T> error(String errMsg, String errorCode) {
         Result<T> resp = new Result<T>();
-        resp.hasError = true;
         resp.error = true;
         resp.msg = errMsg;
         resp.errorCode = errorCode;
@@ -94,19 +96,9 @@ public class Result<T> implements Serializable {
      */
     @JsonIgnore
     public boolean isErrorType(final ErrorType errorType) {
-        if (errorType == null)
-            return false;
-        if (!hasError())
-            return false;
+        if (errorType == null || !isError()) return false;
+
         return Objects.equals(errorCode, errorType.getCode());
-    }
-
-    public boolean hasError() {
-        return hasError;
-    }
-
-    public void setHasError(boolean hasError) {
-        this.hasError = hasError;
     }
 
     public T getData() {
