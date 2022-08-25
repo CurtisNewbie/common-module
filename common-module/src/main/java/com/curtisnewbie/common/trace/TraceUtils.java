@@ -46,6 +46,13 @@ public final class TraceUtils {
         return bag != null ? bag.getValue() : null;
     }
 
+    /** Get userNo from the trace info, if null throw exception */
+    public static String requireUserNo() {
+        final String userNo = get(USER_NO);
+        AssertUtils.notNull(userNo, "Please login first");
+        return userNo;
+    }
+
     /** Put TUser to the trace info */
     public static void putTUser(TUser tu) {
         Assert.notNull(tu, "tUser == null");
