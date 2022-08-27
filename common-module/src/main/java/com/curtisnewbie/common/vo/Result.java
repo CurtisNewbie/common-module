@@ -29,11 +29,7 @@ public class Result<T> implements Serializable {
     private T data;
 
     public static <T> Result<T> ok() {
-        Result<T> resp = new Result<T>();
-        resp.error = false;
-        resp.msg = "";
-        resp.data = null;
-        return resp;
+        return Result.of(null);
     }
 
     public static <T> Result<T> runThenOk(Runnable r) {
