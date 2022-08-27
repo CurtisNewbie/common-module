@@ -41,10 +41,10 @@ public class AsyncUtils implements ApplicationContextAware {
         CompletableFuture.runAsync(() -> {
             if (span != null) {
                 try (Tracer.SpanInScope ws = tracer.withSpanInScope(span)) {
-                    dr.setErrorResult(supplier.get());
+                    dr.setResult(supplier.get());
                 }
             } else {
-                dr.setErrorResult(supplier.get());
+                dr.setResult(supplier.get());
             }
         }).exceptionally(e -> {
             dr.setErrorResult(e);
