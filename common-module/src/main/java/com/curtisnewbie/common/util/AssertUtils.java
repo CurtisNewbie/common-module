@@ -351,4 +351,32 @@ public final class AssertUtils {
     public static void notInBetween(int val, int start, int end, ErrorType errorType) {
         isTrue(val < start || val > end, errorType);
     }
+
+    /**
+     * Assert value is greater than target
+     */
+    public static void greaterThan(int val, int target, String errMsg) {
+        isTrue(val > target, errMsg);
+    }
+
+    /**
+     * Assert value is greater than or equal to target
+     */
+    public static void greaterOrEqual(int val, int target, String errMsg) {
+        isTrue(val >= target, errMsg);
+    }
+
+    /**
+     * Assert value is less than target
+     */
+    public static void lessThan(int val, int target, String errMsg) {
+        isTrue(val < target, errMsg);
+    }
+
+    /**
+     * Assert value is less than or equal to target
+     */
+    public static void lessOrEqual(int val, int target, String errMsg) {
+        isTrue(val <= target, errMsg);
+    }
 }
