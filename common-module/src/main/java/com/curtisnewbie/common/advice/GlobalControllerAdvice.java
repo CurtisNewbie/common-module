@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.concurrent.CompletionException;
 
 import static java.lang.String.format;
 
@@ -29,6 +30,22 @@ public class GlobalControllerAdvice {
     @ResponseBody
     public Result<?> handleGeneralException(Exception e) {
         log.error("Unknown exception occurred", e);
+        return Result.error("Unknown error, please try again later");
+    }
+
+    @ExceptionHandler(CompletionException.class)
+    @ResponseBody
+    public Result<?> handleCompletionException(CompletionException e) {
+        log.error("completion exception occurred", e);
+        final Throwable c = e.getCause();
+        if (c != null) {
+            if (c instanceof MsgEmbeddedException)
+                return handleMsgEmbeddedException((MsgEmbeddedException) c);
+            if (c instanceof UnrecoverableException)
+                return handleUnrecoverableMsgEmbeddedException((UnrecoverableException) c);
+            if (c instanceof MethodArgumentNotValidException)
+                return handleMethodArgumentNotValidException((MethodArgumentNotValidException) c);
+        }
         return Result.error("Unknown error, please try again later");
     }
 
