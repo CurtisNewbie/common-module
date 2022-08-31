@@ -27,6 +27,7 @@ public final class LockUtils {
         try {
             return r.call();
         } catch (Exception e) {
+            if (e instanceof RuntimeException) throw (RuntimeException) e;
             throw new IllegalStateException(e);
         } finally {
             lock.unlock();
