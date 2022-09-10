@@ -58,6 +58,7 @@ public final class JsonUtils {
      * Read value as object using internally cached {@link JsonMapper}
      */
     public static <T> T readValueAsObject(String json, Class<T> clz) throws JsonProcessingException {
+        if (String.class.isAssignableFrom(clz)) return clz.cast(json);
         return jsonMapper.readValue(json, clz);
     }
 
