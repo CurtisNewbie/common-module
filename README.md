@@ -1,6 +1,6 @@
 # common-module
 
-common-module V2.1.6
+common-module V2.1.7
 
 ## Modules and Dependencies
 
