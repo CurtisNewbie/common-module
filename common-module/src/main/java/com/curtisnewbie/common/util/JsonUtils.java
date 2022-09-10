@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.*;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.*;
 import org.apache.poi.ss.formula.functions.*;
 
 import java.util.*;
@@ -123,6 +124,7 @@ public final class JsonUtils {
         JsonMapper jm = new JsonMapper();
         jm.setTimeZone(TimeZone.getDefault());
         jm.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        jm.registerModule(new JavaTimeModule());
         return jm;
     }
 
