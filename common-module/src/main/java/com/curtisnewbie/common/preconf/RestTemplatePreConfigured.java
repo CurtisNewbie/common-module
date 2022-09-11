@@ -2,11 +2,10 @@ package com.curtisnewbie.common.preconf;
 
 import com.fasterxml.jackson.databind.*;
 import org.springframework.boot.autoconfigure.condition.*;
-import org.springframework.http.converter.*;
+import org.springframework.context.annotation.*;
 import org.springframework.http.converter.json.*;
 import org.springframework.web.client.*;
 
-import java.util.*;
 
 /**
  * Import this bean to have a preconfigured RestTemplate
@@ -15,6 +14,7 @@ import java.util.*;
  */
 public class RestTemplatePreConfigured {
 
+    @Bean
     @ConditionalOnMissingBean(RestTemplate.class)
     public RestTemplate restTemplate(MappingJackson2HttpMessageConverter converter) {
         RestTemplate restTemplate = new RestTemplate();
@@ -22,6 +22,7 @@ public class RestTemplatePreConfigured {
         return restTemplate;
     }
 
+    @Bean
     @ConditionalOnMissingBean(MappingJackson2HttpMessageConverter.class)
     public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter(ObjectMapper objectMapper) {
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
