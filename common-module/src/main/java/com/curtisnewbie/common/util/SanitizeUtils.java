@@ -19,7 +19,7 @@ public final class SanitizeUtils {
         return src.replaceAll("[\u00a0　]", " ");
     }
 
-    /** Replace all  , '　' and normal spaces */
+    /** Remove all  , '　' and normal spaces */
     public static String removeSpaces(String src) {
         if (src == null) return null;
         return src.replaceAll("[\u00a0　 ]", "");
