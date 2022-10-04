@@ -16,25 +16,36 @@ import java.util.function.*;
 @Slf4j
 public final class AsyncUtils {
 
-    private static final Executor defaultExecutor = ForkJoinPool.commonPool();
-    private static final ConcurrentMap<String, Executor> executorMap = new ConcurrentHashMap<>();
-    private static final int availableProcessors = Runtime.getRuntime().availableProcessors();
+    public static final int AVAILABLE_PROCESSORS = Runtime.getRuntime().availableProcessors();
+
+    /** Lazy init work stealing pool */
+    private static volatile Executor commonWorkStealingPool;
+    /** Lock for {@link #commonWorkStealingPool} */
+    private static final Object cwspLock = new Object();
 
     static {
-        log.info("Available Processors: {}", availableProcessors);
+        log.info("Available Processors: {}", AVAILABLE_PROCESSORS);
     }
 
     private AsyncUtils() {
     }
 
-    /** Create work stealing pool with parallelism = N * processors */
-    public static Executor workStealingPoolAvailProc(int n) {
-        return workStealingPool(availableProcessors * n);
+    public static Executor getCommonWorkStealingPool() {
+        if (commonWorkStealingPool != null)
+            return commonWorkStealingPool;
+
+        synchronized (cwspLock) {
+            if (commonWorkStealingPool == null) {
+                commonWorkStealingPool = workStealingPoolWithAvailProc();
+            }
+        }
+
+        return commonWorkStealingPool;
     }
 
     /** Create work stealing pool with parallelism = processors */
-    public static Executor workStealingPoolAvailProc() {
-        return workStealingPoolAvailProc(availableProcessors);
+    public static Executor workStealingPoolWithAvailProc() {
+        return workStealingPool(AVAILABLE_PROCESSORS);
     }
 
     /** Create work stealing pool */
@@ -45,17 +56,6 @@ public final class AsyncUtils {
     /** Create work stealing pool */
     public static Executor workStealingPool(int parallelism) {
         return Executors.newWorkStealingPool(parallelism);
-    }
-
-    /**
-     * Get Executor by name
-     * <p>
-     * The executor is internally cached, if the executor is absent, a new working stealing pool is computed and
-     * returned
-     */
-    public static Executor getExecutor(String name, int parallelism) {
-        executorMap.computeIfAbsent(name, (key) -> Executors.newWorkStealingPool(parallelism));
-        return executorMap.get(name);
     }
 
     public static DeferredResult<Result<Void>> runAsync(Runnable r) {
@@ -81,21 +81,20 @@ public final class AsyncUtils {
     }
 
     public static <V> DeferredResult<V> runAsync(Supplier<V> supplier) {
-        return runAsync(supplier, defaultExecutor);
+        return runAsync(supplier, getCommonWorkStealingPool());
     }
 
     public static <V> DeferredResult<V> runAsync(Supplier<V> supplier, Executor executor) {
-        if (executor == null) executor = defaultExecutor;
+        if (executor == null) executor = getCommonWorkStealingPool();
 
         final DeferredResult<V> dr = new DeferredResult<>();
         final TraceUtils.CurrentTrace currentTrace = TraceUtils.currentTrace();
 
-        CompletableFuture.runAsync(() -> {
-            currentTrace.tryRunWithSpan(() -> dr.setResult(supplier.get()));
-        }, executor).exceptionally(e -> {
-            dr.setErrorResult(e);
-            return null;
-        });
+        CompletableFuture.runAsync(() -> currentTrace.tryRunWithSpan(() -> dr.setResult(supplier.get())), executor)
+                .exceptionally(e -> {
+                    dr.setErrorResult(e);
+                    return null;
+                });
         return dr;
     }
 }
