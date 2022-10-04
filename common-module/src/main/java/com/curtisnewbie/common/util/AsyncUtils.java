@@ -1,6 +1,7 @@
 package com.curtisnewbie.common.util;
 
 import brave.*;
+import com.curtisnewbie.common.trace.TraceUtils;
 import com.curtisnewbie.common.vo.*;
 import lombok.extern.slf4j.*;
 import org.springframework.beans.*;
@@ -18,10 +19,7 @@ import java.util.function.*;
  * @author yongj.zhuang
  */
 @Slf4j
-@Component
-public class AsyncUtils implements ApplicationContextAware {
-
-    private static volatile Tracer tracer = null;
+public class AsyncUtils {
 
     public static DeferredResult<Result<Void>> runAsync(Runnable r) {
         return runAsyncResult(() -> {
@@ -36,29 +34,14 @@ public class AsyncUtils implements ApplicationContextAware {
 
     public static <V> DeferredResult<V> runAsync(Supplier<V> supplier) {
         final DeferredResult<V> dr = new DeferredResult<>();
-        final Span span = tracer != null ? tracer.currentSpan() : null;
+        final TraceUtils.CurrentTrace currentTrace = TraceUtils.currentTrace();
 
         CompletableFuture.runAsync(() -> {
-            if (span != null) {
-                try (Tracer.SpanInScope ws = tracer.withSpanInScope(span)) {
-                    dr.setResult(supplier.get());
-                }
-            } else {
-                dr.setResult(supplier.get());
-            }
+            currentTrace.tryRunWithSpan(() -> dr.setResult(supplier.get()));
         }).exceptionally(e -> {
             dr.setErrorResult(e);
             return null;
         });
         return dr;
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        try {
-            AsyncUtils.tracer = applicationContext.getBean(Tracer.class);
-        } catch (Exception e) {
-            log.error("Failed to obtain Tracer from ApplicationContext", e);
-        }
     }
 }

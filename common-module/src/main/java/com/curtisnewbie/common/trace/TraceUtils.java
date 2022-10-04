@@ -102,10 +102,50 @@ public final class TraceUtils {
      */
     public static void runWithSpan(Runnable r, Tracer tracer) {
         final Span newSpan = tracer.nextSpan().start();
-        try (Tracer.SpanInScope ws = tracer.withSpanInScope(newSpan.start())) {
+        runWithSpan(r, tracer, newSpan);
+    }
+
+    /**
+     * Run with the given span, and finish the span when Runnable returns
+     */
+    public static void runWithSpan(Runnable r, Tracer tracer, Span nextSpan) {
+        try (Tracer.SpanInScope ws = tracer.withSpanInScope(nextSpan.start())) {
             r.run();
-        } finally {
-            newSpan.finish();
+        }
+    }
+
+    /**
+     * Get current Tracer and next Span, the tracer is nullable, and the next span may also be null if the tracer is
+     * null already
+     */
+    public static CurrentTrace currentTrace() {
+        final Tracer tracer = Tracing.currentTracer();
+        final Span nextSpan = tracer != null ? tracer.nextSpan() : null;
+        return new CurrentTrace(tracer, nextSpan);
+    }
+
+    /**
+     * Wrapper for current Tracer and next Span
+     */
+    public static class CurrentTrace {
+        public final Tracer tracer;
+        public final Span nextSpan;
+
+        public CurrentTrace(Tracer tracer, Span nextSpan) {
+            this.tracer = tracer;
+            this.nextSpan = nextSpan;
+        }
+
+        /**
+         * Try run with the next Span, the next Span is null, then the runnable is executed without any tracing
+         * information
+         */
+        public void tryRunWithSpan(Runnable r) {
+            if (nextSpan != null) {
+                TraceUtils.runWithSpan(r, tracer, nextSpan);
+            } else {
+                r.run();
+            }
         }
     }
 }
