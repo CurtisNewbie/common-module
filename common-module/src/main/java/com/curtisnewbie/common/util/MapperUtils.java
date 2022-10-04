@@ -2,6 +2,7 @@ package com.curtisnewbie.common.util;
 
 import com.baomidou.mybatisplus.core.conditions.*;
 import com.baomidou.mybatisplus.core.conditions.query.*;
+import com.baomidou.mybatisplus.core.conditions.update.*;
 import com.baomidou.mybatisplus.core.mapper.*;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.curtisnewbie.common.dao.*;
@@ -102,5 +103,41 @@ public final class MapperUtils {
             return null;
 
         return t.getId();
+    }
+
+    /**
+     * IN condition
+     */
+    public static <T> LambdaQueryWrapper<T> in(SFunction<T, ?> inFunc, Collection<?> c) {
+        return new LambdaQueryWrapper<T>().in(inFunc, c);
+    }
+
+    /**
+     * Equals condition
+     */
+    public static <T, V> LambdaQueryWrapper<T> eq(SFunction<T, V> eqFunc, V val) {
+        return new LambdaQueryWrapper<T>().eq(eqFunc, val);
+    }
+
+    /**
+     * SELECT statement
+     */
+    @SafeVarargs
+    public static <T> LambdaQueryWrapper<T> select(SFunction<T, ?>... columns) {
+        return new LambdaQueryWrapper<T>().select(columns);
+    }
+
+    /**
+     * Not Equals condition
+     */
+    public static <T, V> LambdaQueryWrapper<T> ne(SFunction<T, V> neFunc, V val) {
+        return new LambdaQueryWrapper<T>().ne(neFunc, val);
+    }
+
+    /**
+     * SET statement
+     */
+    public static <T, V> LambdaUpdateWrapper<T> set(SFunction<T, V> setFunc, V val) {
+        return new LambdaUpdateWrapper<T>().set(setFunc, val);
     }
 }
