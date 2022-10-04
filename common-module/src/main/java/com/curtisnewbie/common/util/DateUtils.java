@@ -18,6 +18,12 @@ public final class DateUtils {
     /** dd/MM/yyyy HH:mm */
     public static final String DD_MM_YYYY_HH_MM = "dd/MM/yyyy HH:mm";
 
+    /** dd/MM/yyyy HH:mm:ss */
+    public static final String DD_MM_YYYY_HH_MM_SS = "dd/MM/yyyy HH:mm:ss";
+
+    /** yyyy-MM-dd HH:mm:ss */
+    public static final String DASH_DD_MM_YYYY_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
+
     /**
      * Format date using given pattern
      */

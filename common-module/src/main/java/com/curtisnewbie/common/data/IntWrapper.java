@@ -1,8 +1,7 @@
-package com.curtisnewbie.common.util;
+package com.curtisnewbie.common.data;
 
 import lombok.*;
 
-// todo, to be moved to data package
 /**
  * Wrapper of int value (useful for lambda)
  *
@@ -30,6 +29,22 @@ public class IntWrapper {
      */
     public int decr() {
         return --value;
+    }
+
+    /**
+     * Increment by
+     */
+    public int incrBy(int delta) {
+        value += delta;
+        return value;
+    }
+
+    /**
+     * Decrement by
+     */
+    public int decrBy(int delta) {
+        value -= delta;
+        return value;
     }
 
 }
