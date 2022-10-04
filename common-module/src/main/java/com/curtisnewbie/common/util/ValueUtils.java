@@ -3,10 +3,12 @@ package com.curtisnewbie.common.util;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.util.Assert;
 
+import java.lang.reflect.*;
 import java.math.*;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.*;
 
 /**
  * Value Utils
@@ -110,6 +112,37 @@ public final class ValueUtils {
 
         if (useSetter)
             setter.accept(valueSupplier.get());
+    }
+
+    /**
+     * Check if the object is 'empty' by looking all of its fields
+     *
+     * @param o       the object examined
+     * @param excluded fields to be excluded (not examined)
+     */
+    public static boolean isEmptyObject(Object o, String... excluded) {
+        if (o == null)
+            return true;
+
+        final Set<String> exclSet = Arrays.stream(excluded).collect(Collectors.toSet());
+
+        final Field[] fields = o.getClass().getDeclaredFields();
+        for (final Field f : fields) {
+
+            if (Modifier.isStatic(f.getModifiers()) || exclSet.contains(f.getName()))
+                continue;
+
+            f.setAccessible(true);
+
+            try {
+                if (f.get(o) != null)
+                    return false;
+
+            } catch (IllegalAccessException e) {
+                throw new IllegalStateException(String.format("Unable to access field: %s", f), e);
+            }
+        }
+        return true;
     }
 
 }
