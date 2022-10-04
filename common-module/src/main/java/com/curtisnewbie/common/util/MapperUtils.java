@@ -140,4 +140,12 @@ public final class MapperUtils {
     public static <T, V> LambdaUpdateWrapper<T> set(SFunction<T, V> setFunc, V val) {
         return new LambdaUpdateWrapper<T>().set(setFunc, val);
     }
+
+    /**
+     * Limit offset, limit statement
+     */
+    public static <T> LambdaQueryWrapper<T> limit(long offset, long limit) {
+        return new LambdaQueryWrapper<T>().last(PagingUtil.limit(offset, limit));
+    }
+
 }
