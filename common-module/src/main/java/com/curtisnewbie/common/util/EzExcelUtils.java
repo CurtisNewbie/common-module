@@ -39,10 +39,11 @@ public final class EzExcelUtils {
      * @param templatePath path to template file
      */
     public static void writeExcel(List<?> params, OutputStream outputStream, String templatePath) {
-        final ExcelWriter excelWriter = EasyExcel.write(new BufferedOutputStream(outputStream)).withTemplate(templatePath).build();
-        WriteSheet writeSheet = EasyExcel.writerSheet().build();
-        excelWriter.fill(params, writeSheet);
-        excelWriter.finish();
+        try (ExcelWriter excelWriter = EasyExcel.write(new BufferedOutputStream(outputStream)).withTemplate(templatePath).build()) {
+            WriteSheet writeSheet = EasyExcel.writerSheet().build();
+            excelWriter.fill(params, writeSheet);
+            excelWriter.finish();
+        }
     }
 
     /**
