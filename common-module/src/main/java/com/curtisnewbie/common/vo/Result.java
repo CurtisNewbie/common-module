@@ -3,6 +3,7 @@ package com.curtisnewbie.common.vo;
 import com.curtisnewbie.common.util.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import java.io.Serializable;
 import java.util.Objects;

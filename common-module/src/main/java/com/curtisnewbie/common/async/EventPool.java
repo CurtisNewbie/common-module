@@ -2,7 +2,6 @@ package com.curtisnewbie.common.async;
 
 import brave.*;
 import lombok.extern.slf4j.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
 import org.springframework.lang.*;
 import org.springframework.util.*;
