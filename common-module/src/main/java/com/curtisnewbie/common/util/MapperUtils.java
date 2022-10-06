@@ -74,7 +74,7 @@ public final class MapperUtils {
     /**
      * Select a list of entities and convert it
      */
-    public static <T, V> List<V> selectListAndConvert(@Nullable Wrapper<T> wrapper, BaseMapper<T> baseMapper, Function<T, V> converter) {
+    public static <T, V> List<V> selectListAndConvert(Wrapper<T> wrapper, BaseMapper<T> baseMapper, Function<T, V> converter) {
         Assert.notNull(converter, "converter == null");
         List<T> tl = baseMapper.selectList(wrapper);
         return tl.stream().map(converter).collect(Collectors.toList());
@@ -115,7 +115,7 @@ public final class MapperUtils {
     /**
      * Equals condition
      */
-    public static <T, V> LambdaQueryWrapper<T> eq(SFunction<T, V> eqFunc, V val) {
+    public static <T, V> LambdaQueryWrapper<T> eq(SFunction<T, ?> eqFunc, V val) {
         return new LambdaQueryWrapper<T>().eq(eqFunc, val);
     }
 
