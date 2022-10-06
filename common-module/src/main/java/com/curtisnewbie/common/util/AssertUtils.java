@@ -53,9 +53,16 @@ public final class AssertUtils {
     /**
      * Assert collection not null or empty
      */
-    public static void notEmpty(Collection<?> c) {
+    public static void notEmpty(Collection<?> c, String msg) {
         nonNull(c);
-        isFalse(c.isEmpty(), DEFAULT_NON_NULL_OR_EMPTY_MSG);
+        isFalse(c.isEmpty(), msg);
+    }
+
+    /**
+     * Assert collection not null or empty
+     */
+    public static void notEmpty(Collection<?> c) {
+        notEmpty(c, DEFAULT_NON_NULL_OR_EMPTY_MSG);
     }
 
     /**
