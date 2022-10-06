@@ -14,12 +14,12 @@ public interface ChainableAction<T, V> {
     void startAction(T t);
 
     /**
-     * Compensate action
+     * Compensate current action on exception
      */
     ChainableAction<T, V> compensate(CompensateAction<T, V> compensation);
 
     /**
-     * Provide next ChainableAction, and return the next ChainableAction
+     * Chain to next action, and return next ChainableAction
      */
     <R> ChainableAction<V, R> then(TFunction<V, R> next);
 
