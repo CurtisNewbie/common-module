@@ -15,26 +15,26 @@ import java.time.*;
  */
 public class LDTTimer {
 
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private LocalDateTime startTime = null;
+    private LocalDateTime endTime = null;
 
     /** Get a new timer and start it */
     public static LDTTimer startTimer() {
-        LDTTimer t = new LDTTimer();
-        t.start();
-        return t;
+        return new LDTTimer().start();
     }
 
-    /** start the timer */
-    public void start() {
-        Assert.isNull(startTime, "Timer started already");
+    /** start the timer, repeatable action, only the first time calling this method takes effect */
+    public LDTTimer start() {
+        if (startTime != null) return this;
         startTime = LocalDateTime.now();
+        return this;
     }
 
-    /** stop the timer */
-    public void stop() {
-        Assert.isNull(endTime, "Timer stopped already");
+    /** stop the timer, repeatable action, only the first time calling this method takes effect */
+    public LDTTimer stop() {
+        if (endTime != null) return this;
         endTime = LocalDateTime.now();
+        return this;
     }
 
     /** Get duration */
