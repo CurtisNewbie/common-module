@@ -1,13 +1,9 @@
-# common-module
+# common-module V2.1.8
 
-common-module V2.1.7
+Common stuff.
 
 ## Modules and Dependencies
 
 This project depends on the following modules that you must manually install (using `mvn clean install`).
 
-- curtisnewbie-bom
-    - description: BOM file for dependency management
-    - url: https://github.com/CurtisNewbie/curtisnewbie-bom
-    - branch: main
-    - under `/microservice` folder
+- [curtisnewbie-bom](https://github.com/CurtisNewbie/curtisnewbie-bom)
