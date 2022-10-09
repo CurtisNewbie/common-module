@@ -9,6 +9,11 @@ package com.curtisnewbie.common.action;
 public interface ChainableAction<T, V> {
 
     /**
+     * Start first action in current chain
+     */
+    void startFirst();
+
+    /**
      * Start the ChainableAction
      */
     void startAction(T t);
@@ -24,15 +29,28 @@ public interface ChainableAction<T, V> {
     <R> ChainableAction<V, R> then(TFunction<V, R> next);
 
     /**
-     * Build ChainableAction by providing the first action
+     * Build the first ChainableAction
+     * <p>
+     * The first ChainableAction doesn't take any argument, the T type will be simply Void.
+     * This is useful when we want to do the following:
+     *
+     * <pre>
+     * {@code
+     *      ChainableAction.buildFirst((t) -> {
+     *          // ...
+     *      }).then((t) -> {
+     *          // ...
+     *      }).startFirst();
+     * }
+     * </pre>
      */
-    static <T, V> ChainableAction<T, V> buildFirst(TFunction<T, V> firstAction) {
+    static <V> ChainableAction<Void, V> buildFirst(TFunction<Void, V> firstAction) {
         return LinkedChainableAction.ofAction(firstAction);
     }
 
     /**
      * Get first ChainableAction
      */
-    ChainableAction getFirst();
+    ChainableAction<Void, ?> getFirst();
 
 }

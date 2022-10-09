@@ -62,6 +62,11 @@ public class LinkedChainableAction<T, V> implements ChainableAction<T, V> {
         return prevAction.getFirst();
     }
 
+    @Override
+    public void startFirst() {
+        getFirst().startAction(null);
+    }
+
     public static <K, J> LinkedChainableAction<K, J> ofAction(TFunction<K, J> action) {
         return new LinkedChainableAction<K, J>(null, action);
     }
