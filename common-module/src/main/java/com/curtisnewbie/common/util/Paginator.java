@@ -51,6 +51,9 @@ public final class Paginator<T> {
     /** Timer (nullable) */
     private LDTTimer timer = null;
 
+    public Paginator() {
+    }
+
     public Paginator(Function<PagingParam, List<T>> nextPageSupplier) {
         this.nextPageSupplier = nextPageSupplier;
     }
