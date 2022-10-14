@@ -3,7 +3,8 @@ package com.curtisnewbie.common.vo;
 import com.curtisnewbie.common.util.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import org.springframework.web.context.request.async.DeferredResult;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.lang.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -14,6 +15,7 @@ import java.util.function.Supplier;
  *
  * @author yongjie.zhuang
  */
+@Slf4j
 @Data
 public class Result<T> implements Serializable {
 
@@ -104,6 +106,31 @@ public class Result<T> implements Serializable {
 
     public void setData(T data) {
         this.data = data;
+    }
+
+    /**
+     * Try to get data from Result, throw exception if failed
+     */
+    public static <T> T tryGetData(Result<T> r) {
+        return tryGetData(r, null);
+    }
+
+    /**
+     * Try to get data from Result, throw exception if failed
+     */
+    public static <T> T tryGetData(Result<T> r, @Nullable Supplier<String> descSupplier) {
+        Objects.requireNonNull(r);
+        String desc = descSupplier != null ? descSupplier.get() : null;
+        if (r.isError()) {
+            if (desc != null)
+                log.error("Failed to invoke endpoint ('{}'), code: {}, msg: {}", desc, r.errorCode, r.msg);
+            else
+                log.error("Failed to invoke endpoint, code: {}, msg: {}", r.errorCode, r.msg);
+
+            // throw exception
+            r.assertIsOk();
+        }
+        return r.getData();
     }
 
 }
