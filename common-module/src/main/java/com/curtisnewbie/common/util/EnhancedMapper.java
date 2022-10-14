@@ -1,6 +1,7 @@
 package com.curtisnewbie.common.util;
 
 import com.baomidou.mybatisplus.core.conditions.*;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.*;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.*;
@@ -65,6 +66,13 @@ public interface EnhancedMapper<T> extends BaseMapper<T> {
         Wrapper gw = wrapper;
         final Page rp = this.selectPage(p, gw);
         return PagingUtil.toPageableList(rp, converter);
+    }
+
+    /**
+     * Update values based on the LambdaUpdateWrapper
+     */
+    default void update(LambdaUpdateWrapper<T> updateWrapper) {
+        this.update(null, updateWrapper);
     }
 
 }
