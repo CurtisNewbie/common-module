@@ -15,10 +15,29 @@ import java.util.function.*;
 public final class Retry {
 
     private final Runnable r;
+    private final long delayMilli;
 
-    public Retry(final Runnable r) {
+    /**
+     * Create Retry with no delay
+     *
+     * @param r operation
+     */
+    public Retry(Runnable r) {
         Assert.notNull(r, "Runnable == null");
         this.r = r;
+        this.delayMilli = -1; // no delay
+    }
+
+    /**
+     * Create Retry
+     *
+     * @param r          operation
+     * @param delayMilli delay between each attempt in milliseconds, it should be fairly small, like some ~100ms delays
+     */
+    public Retry(Runnable r, long delayMilli) {
+        Assert.notNull(r, "Runnable == null");
+        this.r = r;
+        this.delayMilli = delayMilli;
     }
 
     /**
@@ -34,15 +53,20 @@ public final class Retry {
         do {
             try {
                 r.run();
-                return; // success
+                return; // success, no exception is thrown at all
             } catch (Exception t) {
                 prevException = t;
                 log.debug("Retry exception: ", t);
             }
-        } while (prevException != null && ++currRetry < retryTimes);
+
+            // try to delay each retry
+            if (currRetry + 1 < retryTimes && delayMilli > 0)
+                ThreadUtils.sleep(delayMilli);
+
+        } while (++currRetry < retryTimes);
 
         // exceeded maximum retry times, this is the last exception that we caught
-        if (prevException != null && onException != null) {
+        if (onException != null) {
             onException.accept(prevException);
         }
     }

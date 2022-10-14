@@ -1,9 +1,11 @@
 package com.curtisnewbie.common.util;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.*;
 
 import java.time.*;
+import java.util.function.Consumer;
 
 /**
  * Timer based on {@link LocalDateTime}
@@ -13,6 +15,7 @@ import java.time.*;
  *
  * @author yongj.zhuang
  */
+@Slf4j
 public class LDTTimer {
 
     private LocalDateTime startTime = null;
@@ -49,6 +52,23 @@ public class LDTTimer {
         final Duration duration = duration();
         final String s = duration.toString().substring(2);
         return s.replace("H", " Hours ").replace("M", " Minutes ").replace("S", " Seconds ");
+    }
+
+    /**
+     * Time operation and call onFinished callback in which the timer is stopped
+     */
+    public static void timed(Runnable r, Consumer<LDTTimer> onFinished) {
+        LDTTimer timer = LDTTimer.startTimer();
+        r.run();
+        timer.stop();
+        onFinished.accept(timer);
+    }
+
+    /**
+     * Time and log the operation
+     */
+    public static void timedAndLogged(Runnable r, String opName) {
+        timed(r, (timer) -> log.info("Operation '{}' took: {}", opName, timer.printDuration()));
     }
 
 }

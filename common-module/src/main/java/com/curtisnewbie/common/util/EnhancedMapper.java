@@ -66,4 +66,5 @@ public interface EnhancedMapper<T> extends BaseMapper<T> {
         final Page rp = this.selectPage(p, gw);
         return PagingUtil.toPageableList(rp, converter);
     }
+
 }

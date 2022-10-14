@@ -51,6 +51,10 @@ public final class Paginator<T> {
     /** Timer (nullable) */
     private LDTTimer timer = null;
 
+    public Paginator(Function<PagingParam, List<T>> nextPageSupplier) {
+        this.nextPageSupplier = nextPageSupplier;
+    }
+
     /** set whether the looping is timed */
     public Paginator<T> isTimed(boolean isTimed) {
         if (isTimed)
