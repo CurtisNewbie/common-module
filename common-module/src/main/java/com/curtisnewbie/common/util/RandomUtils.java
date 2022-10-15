@@ -51,6 +51,8 @@ public final class RandomUtils {
      * Opinionated way to build a sequence number
      * <p>
      * The format is: $prefix + timestamp() + randomNumeric($numericLen)
+     * <p>
+     * The preferred way is to use {@link IdUtils#gen()} or {@link IdUtils#gen(String)}
      */
     public static String sequence(String prefix, int numericLen) {
         return concat(prefix, timestamp(), randomNumeric(numericLen));
