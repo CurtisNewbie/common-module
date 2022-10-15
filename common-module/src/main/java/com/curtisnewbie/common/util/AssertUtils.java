@@ -386,4 +386,32 @@ public final class AssertUtils {
     public static void lessOrEqual(int val, int target, String errMsg) {
         isTrue(val <= target, errMsg);
     }
+
+    /**
+     * Assert value is greater than target
+     */
+    public static void greaterThan(long val, long target, String errMsg) {
+        isTrue(val > target, errMsg);
+    }
+
+    /**
+     * Assert value is greater than or equal to target
+     */
+    public static void greaterOrEqual(long val, long target, String errMsg) {
+        isTrue(val >= target, errMsg);
+    }
+
+    /**
+     * Assert value is less than target
+     */
+    public static void lessThan(long val, long target, String errMsg) {
+        isTrue(val < target, errMsg);
+    }
+
+    /**
+     * Assert value is less than or equal to target
+     */
+    public static void lessOrEqual(long val, long target, String errMsg) {
+        isTrue(val <= target, errMsg);
+    }
 }
