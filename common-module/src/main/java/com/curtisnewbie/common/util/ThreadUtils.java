@@ -25,4 +25,12 @@ public final class ThreadUtils {
         }
         return isInterrupted;
     }
+
+    /**
+     * Try to loop for some time, doesn't sleep
+     */
+    public static void loop(long milliSec) {
+        final long end = System.currentTimeMillis() + milliSec;
+        while (System.currentTimeMillis() < end) ;
+    }
 }
