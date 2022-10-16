@@ -367,6 +367,13 @@ public final class AssertUtils {
     }
 
     /**
+     * Assert value is greater than zero
+     */
+    public static void greaterThanZero(int val, String errMsg) {
+        greaterThan(val, 0, errMsg);
+    }
+
+    /**
      * Assert value is greater than or equal to target
      */
     public static void greaterOrEqual(int val, int target, String errMsg) {
@@ -392,6 +399,13 @@ public final class AssertUtils {
      */
     public static void greaterThan(long val, long target, String errMsg) {
         isTrue(val > target, errMsg);
+    }
+
+    /**
+     * Assert value is greater than zero
+     */
+    public static void greaterThanZero(long val, String errMsg) {
+        greaterThan(val, 0L, errMsg);
     }
 
     /**
