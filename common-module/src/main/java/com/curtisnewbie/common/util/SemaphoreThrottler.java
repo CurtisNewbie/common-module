@@ -1,5 +1,6 @@
 package com.curtisnewbie.common.util;
 
+import com.curtisnewbie.common.exceptions.*;
 import org.springframework.util.*;
 
 import java.util.concurrent.*;
@@ -20,31 +21,33 @@ public class SemaphoreThrottler {
 
 
     /**
-     * Queue the action
+     * Queue the action, if maxConcurrency is exceeded, current thread will wait indefinitely
+     *
+     * @throws OperationAbortedException if the queuing was interrupted
      */
     public <T> T queue(Callable<T> callable) {
-        try {
-            return queue(callable, -1, null);
-        } catch (InterruptedException e) {
-            throw new IllegalStateException(e);
-        }
+        return queue(callable, -1, null);
     }
 
     /**
-     * Queue the action
+     * Queue the action, if maxConcurrency is exceeded, current thread will wait until it times out
      *
-     * @throws InterruptedException if queuing was timed-out
+     * @throws OperationAbortedException if the queuing was timed-out or interrupted
      */
-    public <T> T queue(Callable<T> callable, long timeout, TimeUnit timeUnit) throws InterruptedException {
+    public <T> T queue(Callable<T> callable, long timeout, TimeUnit timeUnit) {
         boolean isAcquired = false;
         try {
-            if (timeout == -1) {
+            if (timeout < 0) {
                 semaphore.acquire();
                 isAcquired = true;
             } else {
                 isAcquired = semaphore.tryAcquire(timeout, timeUnit);
             }
+            if (!isAcquired) throw new OperationAbortedException("Unable to acquire semaphore, aborted");
             return Runner.tryCall(callable);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // reset interrupted
+            throw new OperationAbortedException(e);
         } finally {
             if (isAcquired) semaphore.release();
         }
