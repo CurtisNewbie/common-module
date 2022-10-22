@@ -36,7 +36,7 @@ public final class AsyncUtils {
 
         synchronized (cwspLock) {
             if (commonWorkStealingPool == null) {
-                commonWorkStealingPool = workStealingPoolWithAvailProc();
+                commonWorkStealingPool = workStealingPool(AVAILABLE_PROCESSORS * 2);
             }
         }
 
