@@ -3,7 +3,6 @@ package com.curtisnewbie.common.advice;
 import com.curtisnewbie.common.exceptions.UnrecoverableException;
 import com.curtisnewbie.common.trace.TUser;
 import com.curtisnewbie.common.trace.TraceUtils;
-import com.curtisnewbie.common.util.AssertUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

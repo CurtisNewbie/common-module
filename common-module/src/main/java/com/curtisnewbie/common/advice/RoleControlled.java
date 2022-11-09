@@ -12,6 +12,7 @@ import java.lang.annotation.*;
  * This relies on the {@link RoleControlledAdvice} and {@link TraceUtils#tUser()}
  *
  * @see TraceUtils#tUser()
+ * @deprecated {@link AccessControlled} should be used instead
  */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Documented
