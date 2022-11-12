@@ -119,6 +119,41 @@ public final class MapperUtils {
     }
 
     /**
+     * Not in condition
+     */
+    public static <T, V> LambdaQueryWrapper<T> notIn(SFunction<T, ?> notInFunc, Collection<V> coll) {
+        return new LambdaQueryWrapper<T>().notIn(notInFunc, coll);
+    }
+
+    /**
+     * Less than condition
+     */
+    public static <T, V> LambdaQueryWrapper<T> lt(SFunction<T, ?> ltFunc, V val) {
+        return new LambdaQueryWrapper<T>().lt(ltFunc, val);
+    }
+
+    /**
+     * Less than or equal condition
+     */
+    public static <T, V> LambdaQueryWrapper<T> le(SFunction<T, ?> leFunc, V val) {
+        return new LambdaQueryWrapper<T>().le(leFunc, val);
+    }
+
+    /**
+     * Greater than or equal condition
+     */
+    public static <T, V> LambdaQueryWrapper<T> ge(SFunction<T, ?> geFunc, V val) {
+        return new LambdaQueryWrapper<T>().ge(geFunc, val);
+    }
+
+    /**
+     * Greater than condition
+     */
+    public static <T, V> LambdaQueryWrapper<T> gt(SFunction<T, ?> gtFunc, V val) {
+        return new LambdaQueryWrapper<T>().gt(gtFunc, val);
+    }
+
+    /**
      * SELECT statement
      */
     @SafeVarargs

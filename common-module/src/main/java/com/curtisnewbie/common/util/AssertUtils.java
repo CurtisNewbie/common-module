@@ -12,9 +12,6 @@ import java.util.Objects;
  * <p>
  * For condition that does not match the rule, a {@link UnrecoverableException} is thrown
  * </p>
- * <p>
- * Almost the same as {@link ValidUtils}, except that the {@link RuntimeException} is used
- * </p>
  *
  * @author yongjie.zhuang
  */

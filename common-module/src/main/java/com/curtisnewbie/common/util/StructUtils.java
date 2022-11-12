@@ -76,4 +76,21 @@ public final class StructUtils {
         return s.collect(Collectors.toMap(BiContainer::getLeft, BiContainer::getRight));
     }
 
+    /** Build new HashSet */
+    public static <T> Set<T> newHashSet(T... targs) {
+        Set<T> s = new HashSet<>();
+        for (T t : targs) {
+            s.add(t);
+        }
+        return s;
+    }
+
+    /** Get first value from set */
+    public static <T> T first(Set<T> s) {
+        for (T t : s) {
+            return t;
+        }
+        return null;
+    }
+
 }
