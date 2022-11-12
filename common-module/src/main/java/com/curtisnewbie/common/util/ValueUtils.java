@@ -1,6 +1,5 @@
 package com.curtisnewbie.common.util;
 
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.util.Assert;
 
 import java.lang.reflect.*;
@@ -21,6 +20,18 @@ public final class ValueUtils {
     }
 
     /**
+     * Return true if any is matched (case ignored)
+     * <p>
+     * null value is not allowed, and will always return false
+     */
+    public static boolean equalsAnyIgnoreCase(String o, String[] matched) {
+        if (o == null || matched == null) return false;
+        for (String t : matched)
+            if (o.equalsIgnoreCase(t)) return true;
+        return false;
+    }
+
+    /**
      * Return true if none is matched (case ignored)
      */
     public static boolean equalsNoneIgnoreCase(String o, String first, String... theRest) {
@@ -31,16 +42,12 @@ public final class ValueUtils {
      * Return true if any is matched (case ignored)
      */
     public static boolean equalsAnyIgnoreCase(String o, String first, String... theRest) {
-        if (o == null)
-            return false;
+        if (o == null) return false;
+        if (o.equalsIgnoreCase(first)) return true;
 
-        if (o.equalsIgnoreCase(first))
-            return true;
+        for (String t : theRest)
+            if (o.equalsIgnoreCase(t)) return true;
 
-        for (String t : theRest) {
-            if (o.equalsIgnoreCase(t))
-                return true;
-        }
         return false;
     }
 
@@ -55,12 +62,22 @@ public final class ValueUtils {
      * Return true if any is matched
      */
     public static boolean equalsAny(Object o, Object first, Object... theRest) {
-        if (Objects.equals(o, first))
-            return true;
-
+        if (Objects.equals(o, first)) return true;
         for (Object t : theRest) {
-            if (Objects.equals(o, t))
-                return true;
+            if (Objects.equals(o, t)) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Return true if any is matched
+     * <p>
+     * null value is not allowed, and will always return false
+     */
+    public static boolean equalsAny(Object o, Object[] targets) {
+        if (o == null || targets == null) return false;
+        for (Object t : targets) {
+            if (Objects.equals(o, t)) return true;
         }
         return false;
     }
@@ -117,7 +134,7 @@ public final class ValueUtils {
     /**
      * Check if the object is 'empty' by looking all of its fields
      *
-     * @param o       the object examined
+     * @param o        the object examined
      * @param excluded fields to be excluded (not examined)
      */
     public static boolean isEmptyObject(Object o, String... excluded) {

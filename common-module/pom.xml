@@ -11,20 +11,24 @@
   </parent>
 
   <artifactId>common-module</artifactId>
-  <version>2.1.9</version>
+  <version>2.1.10</version>
   <name>common-module</name>
   <packaging>jar</packaging>
   <description>Common module that contains commonly used utils</description>
+
   <properties>
     <java.version>8</java.version>
+    <easyexcel.version>3.1.1</easyexcel.version>
+    <commons-fileupload.version>1.4</commons-fileupload.version>
+    <commons-io.version>2.11.0</commons-io.version>
+    <poi.version>5.2.0</poi.version>
   </properties>
 
   <dependencies>
-
     <dependency>
       <groupId>com.alibaba</groupId>
       <artifactId>easyexcel</artifactId>
-      <version>3.1.1</version>
+      <version>${easyexcel.version}</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
@@ -51,7 +55,7 @@
     <dependency>
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
-      <version>1.4</version>
+      <version>${commons-fileupload.version}</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
@@ -64,21 +68,21 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.11.0</version>
+      <version>${commons-io.version}</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi</artifactId>
-      <version>5.2.0</version>
+      <version>${poi.version}</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi-ooxml</artifactId>
-      <version>5.2.0</version>
+      <version>${poi.version}</version>
       <scope>provided</scope>
     </dependency>
 
