@@ -31,4 +31,11 @@ public final class StopWatchUtils {
     public static void logStopwatch(Runnable r, String opName) {
         log.info("Operation '{}' took: {}ms", opName, stopwatch(r));
     }
+
+    /** Create new StopWatch and start it */
+    public static StopWatch startNew() {
+        StopWatch sw = new StopWatch();
+        sw.start();
+        return sw;
+    }
 }
