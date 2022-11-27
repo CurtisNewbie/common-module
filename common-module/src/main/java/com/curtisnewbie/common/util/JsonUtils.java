@@ -131,12 +131,21 @@ public final class JsonUtils {
         JsonMapper jm = new JsonMapper();
         jm.setTimeZone(TimeZone.getDefault());
         jm.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        jm.registerModule(new JavaTimeModule());
+        return jm;
+    }
 
+    /**
+     * Construct a new Json Mapper with serializer/deserializer for epoch-base LocalDateTime conversion
+     */
+    public static JsonMapper constructsEpochJsonMapper() {
+        JsonMapper jm = new JsonMapper();
+        jm.setTimeZone(TimeZone.getDefault());
+        jm.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         final JavaTimeModule jtm = new JavaTimeModule();
         jtm.addSerializer(LocalDateTime.class, LocalDateTimeEpochSerializer.INSTANCE);
         jtm.addDeserializer(LocalDateTime.class, LocalDateTimeEpochDeserializer.INSTANCE);
         jm.registerModule(jtm);
-
         return jm;
     }
 
