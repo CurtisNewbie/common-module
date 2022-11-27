@@ -59,7 +59,7 @@ public final class DateUtils {
      */
     public static long getEpochTime(LocalDateTime ldt) {
         Objects.requireNonNull(ldt);
-        return ldt.atZone(ZoneId.systemDefault()).toInstant().getEpochSecond();
+        return ldt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
 
     /**

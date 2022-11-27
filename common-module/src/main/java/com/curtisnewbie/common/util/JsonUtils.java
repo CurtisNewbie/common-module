@@ -1,12 +1,17 @@
 package com.curtisnewbie.common.util;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.*;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.*;
-import org.apache.poi.ss.formula.functions.*;
 
+import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -105,7 +110,8 @@ public final class JsonUtils {
     }
 
     /**
-     * Get the internally cached jsonMapper, JsonMapper is not thread-safe, so don't do any extra reconfiguration after it's used
+     * Get the internally cached jsonMapper, JsonMapper is not thread-safe, so don't do any extra reconfiguration after
+     * it's used
      */
     public static JsonMapper getJsonMapper() {
         return jsonMapper;
@@ -125,8 +131,48 @@ public final class JsonUtils {
         JsonMapper jm = new JsonMapper();
         jm.setTimeZone(TimeZone.getDefault());
         jm.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        jm.registerModule(new JavaTimeModule());
+
+        final JavaTimeModule jtm = new JavaTimeModule();
+        jtm.addSerializer(LocalDateTime.class, LocalDateTimeEpochSerializer.INSTANCE);
+        jtm.addDeserializer(LocalDateTime.class, LocalDateTimeEpochDeserializer.INSTANCE);
+        jm.registerModule(jtm);
+
         return jm;
+    }
+
+    public static class LocalDateTimeEpochSerializer extends JsonSerializer<LocalDateTime> {
+
+        public static final LocalDateTimeEpochSerializer INSTANCE = new LocalDateTimeEpochSerializer();
+
+        @Override
+        public void serialize(LocalDateTime ldt, JsonGenerator gen, SerializerProvider provider) throws IOException {
+            if (ldt == null) gen.writeNull();
+            gen.writeNumber(DateUtils.getEpochTime(ldt));
+        }
+    }
+
+    public static class LocalDateTimeEpochDeserializer extends JsonDeserializer<LocalDateTime> {
+
+        public static final LocalDateTimeEpochDeserializer INSTANCE = new LocalDateTimeEpochDeserializer();
+
+        @Override
+        public LocalDateTime deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+            String text = p.getValueAsString();
+            if (text == null) return null;
+
+            boolean isTimestamp = true;
+            for (int i = 0; i < text.length(); i++) {
+                if (!Character.isDigit(text.charAt(i))) {
+                    isTimestamp = false;
+                    break;
+                }
+            }
+
+            if (isTimestamp) {
+                return LocalDateTime.ofInstant(Instant.ofEpochSecond(Long.parseLong(text)), TimeZone.getDefault().toZoneId());
+            }
+            return LocalDateTime.parse(text, DateTimeFormatter.ISO_LOCAL_DATE_TIME); // fallback to ISO format
+        }
     }
 
 }
