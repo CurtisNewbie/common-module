@@ -4,20 +4,20 @@ import com.curtisnewbie.common.data.BiContainer;
 import com.curtisnewbie.common.util.JsonUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.formula.functions.T;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.*;
@@ -35,11 +35,13 @@ import java.util.concurrent.Future;
  */
 @Slf4j
 @Aspect
+@Profile("dev")
+@Component
 public class ControllerConsoleLogAdvice {
 
-    private static final List<BiContainer<Class, PrintAdapter>> printAdapters = new ArrayList<>();
+    private final List<BiContainer<Class, PrintAdapter>> printAdapters = new ArrayList<>();
 
-    static {
+    public ControllerConsoleLogAdvice(ApplicationContext applicationContext) {
         printAdapters.add(new BiContainer<>(byte[].class, (o) -> ((byte[]) o).length + " bytes"));
         printAdapters.add(new BiContainer<>(ResponseEntity.class, o -> {
             ResponseEntity respEntity = ((ResponseEntity) o);
@@ -65,6 +67,20 @@ public class ControllerConsoleLogAdvice {
         printAdapters.add(new BiContainer<>(Callable.class, Object::toString));
         printAdapters.add(new BiContainer<>(Future.class, Object::toString));
         printAdapters.add(new BiContainer<>(StreamingResponseBody.class, Object::toString));
+
+        final Map<String, PrintAdapterRegistar> registars = applicationContext.getBeansOfType(PrintAdapterRegistar.class);
+        registars.forEach((bean, reg) -> {
+            if (reg.getSupportedClass() == null) {
+                log.warn("PrintAdapterRegistar.getSupportedClass == null, ignored bean '{}'", bean);
+                return;
+            }
+            if (reg.getAdapter() == null) {
+                log.warn("PrintAdapterRegistar.getAdapter == null, ignored bean '{}'", bean);
+                return;
+            }
+
+            printAdapters.add(new BiContainer<>(reg.getSupportedClass(), reg.getAdapter()));
+        });
     }
 
     @Pointcut("within(@org.springframework.stereotype.Controller *) || within(@org.springframework.web.bind.annotation.RestController *)")
@@ -102,7 +118,7 @@ public class ControllerConsoleLogAdvice {
         sb.append("'").append(text).append("'");
     }
 
-    private static <T> String print(T t) {
+    private <T> String print(T t) {
         if (t == null) return "null";
         for (BiContainer<Class, PrintAdapter> printAdapter : printAdapters) {
             if (printAdapter.getLeft().isAssignableFrom(t.getClass())) {
@@ -112,13 +128,27 @@ public class ControllerConsoleLogAdvice {
         try {
             return JsonUtils.writePretty(t);
         } catch (JsonProcessingException e) {
+            log.error("Failed to print object, please consider adding PrintAdapter for this specific type '{}', see PrintAdapterRegistar", t.getClass(), e);
             return t.toString();
         }
     }
 
+    /** PrintAdapter */
     @FunctionalInterface
     public interface PrintAdapter {
 
+        /** Print object */
         String print(Object t);
+
+    }
+
+    /** Registar of PrintAdapter */
+    public interface PrintAdapterRegistar {
+
+        /** Class supported by the PrintAdapter, it's tested using #isAssignableFrom method */
+        Class getSupportedClass();
+
+        /** PrintAdater */
+        PrintAdapter getAdapter();
     }
 }
