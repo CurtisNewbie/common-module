@@ -8,6 +8,8 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
@@ -37,11 +39,14 @@ import java.util.concurrent.Future;
 @Aspect
 @Profile("dev")
 @Component
-public class ControllerConsoleLogAdvice {
+public class ControllerConsoleLogAdvice implements InitializingBean {
 
     private final List<BiContainer<Class, PrintAdapter>> printAdapters = new ArrayList<>();
 
-    public ControllerConsoleLogAdvice(ApplicationContext applicationContext) {
+    @Autowired(required = false)
+    private List<PrintAdapterRegistar> registars;
+
+    public ControllerConsoleLogAdvice() {
         printAdapters.add(new BiContainer<>(byte[].class, (o) -> ((byte[]) o).length + " bytes"));
         printAdapters.add(new BiContainer<>(ResponseEntity.class, o -> {
             ResponseEntity respEntity = ((ResponseEntity) o);
@@ -67,15 +72,18 @@ public class ControllerConsoleLogAdvice {
         printAdapters.add(new BiContainer<>(Callable.class, Object::toString));
         printAdapters.add(new BiContainer<>(Future.class, Object::toString));
         printAdapters.add(new BiContainer<>(StreamingResponseBody.class, Object::toString));
+    }
 
-        final Map<String, PrintAdapterRegistar> registars = applicationContext.getBeansOfType(PrintAdapterRegistar.class);
-        registars.forEach((bean, reg) -> {
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        if (registars == null) return;
+        registars.forEach((reg) -> {
             if (reg.getSupportedClass() == null) {
-                log.warn("PrintAdapterRegistar.getSupportedClass == null, ignored bean '{}'", bean);
+                log.warn("PrintAdapterRegistar.getSupportedClass == null, ignored");
                 return;
             }
             if (reg.getAdapter() == null) {
-                log.warn("PrintAdapterRegistar.getAdapter == null, ignored bean '{}'", bean);
+                log.warn("PrintAdapterRegistar.getAdapter == null, ignored");
                 return;
             }
 
@@ -150,5 +158,20 @@ public class ControllerConsoleLogAdvice {
 
         /** PrintAdater */
         PrintAdapter getAdapter();
+    }
+
+    /** Registar of PrintAdapter that doesn't print anything except '****' */
+    public static PrintAdapterRegistar maskedPrintAdapter(Class clz) {
+        return new ControllerConsoleLogAdvice.PrintAdapterRegistar() {
+            @Override
+            public Class getSupportedClass() {
+                return clz;
+            }
+
+            @Override
+            public ControllerConsoleLogAdvice.PrintAdapter getAdapter() {
+                return o -> "****";
+            }
+        };
     }
 }
