@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.*;
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.*;
 
@@ -136,16 +137,23 @@ public final class JsonUtils {
     }
 
     /**
+     * Build Module for java time (including epoch serializer/deserializer)
+     */
+    public static Module javaEpochTimeModule() {
+        final JavaTimeModule jtm = new JavaTimeModule();
+        jtm.addSerializer(LocalDateTime.class, LocalDateTimeEpochSerializer.INSTANCE);
+        jtm.addDeserializer(LocalDateTime.class, LocalDateTimeEpochDeserializer.INSTANCE);
+        return jtm;
+    }
+
+    /**
      * Construct a new Json Mapper with serializer/deserializer for epoch-base LocalDateTime conversion
      */
     public static JsonMapper constructsEpochJsonMapper() {
         JsonMapper jm = new JsonMapper();
         jm.setTimeZone(TimeZone.getDefault());
         jm.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        final JavaTimeModule jtm = new JavaTimeModule();
-        jtm.addSerializer(LocalDateTime.class, LocalDateTimeEpochSerializer.INSTANCE);
-        jtm.addDeserializer(LocalDateTime.class, LocalDateTimeEpochDeserializer.INSTANCE);
-        jm.registerModule(jtm);
+        jm.registerModule(javaEpochTimeModule());
         return jm;
     }
 
