@@ -186,7 +186,7 @@ public final class JsonUtils {
             }
 
             if (isTimestamp) {
-                return LocalDateTime.ofInstant(Instant.ofEpochSecond(Long.parseLong(text)), TimeZone.getDefault().toZoneId());
+                return LocalDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(text)), TimeZone.getDefault().toZoneId());
             }
             return LocalDateTime.parse(text, DateTimeFormatter.ISO_LOCAL_DATE_TIME); // fallback to ISO format
         }
