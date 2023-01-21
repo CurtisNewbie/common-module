@@ -223,6 +223,9 @@ public final class Paginator<T> {
         public void nextPage() {
             this.offset += limit;
         }
-    }
 
+        public String toLimitStr() {
+            return String.format("limit %d, %d", getOffset(), getLimit());
+        }
+    }
 }
