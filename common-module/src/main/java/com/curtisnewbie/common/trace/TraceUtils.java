@@ -6,7 +6,6 @@ import com.curtisnewbie.common.util.AssertUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 import static java.lang.String.join;
@@ -23,6 +22,7 @@ public final class TraceUtils {
     public static final String USERNAME = "username";
     public static final String USER_ROLE = "role";
     public static final String USER_NO = "userno";
+    public static final String ROLE_NO = "roleno";
     public static final String SERVICES = "services";
 
     private TraceUtils() {
@@ -59,10 +59,12 @@ public final class TraceUtils {
         Assert.notNull(tu.getUsername(), "tUser.username == null");
         Assert.notNull(tu.getRole(), "tUser.role == null");
         Assert.notNull(tu.getUserNo(), "tUser.userNo == null");
+        Assert.notNull(tu.getRoleNo(), "tUser.roleNo == null");
 
         put(USER_ID, String.valueOf(tu.getUserId()));
         put(USERNAME, tu.getUsername());
         put(USER_NO, tu.getUserNo());
+        put(ROLE_NO, tu.getRoleNo());
         put(USER_ROLE, tu.getRole());
         put(SERVICES, tu.getServices() != null ? join(",", tu.getServices()) : "");
     }
@@ -93,6 +95,7 @@ public final class TraceUtils {
                 .username(get(USERNAME))
                 .role(get(USER_ROLE))
                 .userNo(get(USER_NO))
+                .roleNo(get(ROLE_NO))
                 .services(asList(ss.split(",")))
                 .build());
     }
