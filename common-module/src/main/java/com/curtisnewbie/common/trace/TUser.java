@@ -19,7 +19,8 @@ public class TUser {
     private final int userId;
     private final String username;
     private final String userNo;
-    @Deprecated private final String role;
     private final String roleNo;
-    private final List<String> services;
+
+    @Deprecated private final String role;
+    @Deprecated private final List<String> services;
 }
