@@ -10,6 +10,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,7 @@ import java.util.concurrent.Future;
 @Aspect
 @Profile("dev")
 @Component
+@ConditionalOnClass(ServletRequest.class) // Only For MVC
 public class ControllerConsoleLogAdvice implements InitializingBean {
 
     private final List<BiContainer<Class, PrintAdapter>> printAdapters = new ArrayList<>();
