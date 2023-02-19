@@ -36,7 +36,7 @@ public class GlobalControllerAdvice {
     @ExceptionHandler(CompletionException.class)
     @ResponseBody
     public Result<?> handleCompletionException(CompletionException e) {
-        log.error("completion exception occurred", e);
+        log.error("Completion exception occurred", e);
         final Throwable c = e.getCause();
         if (c != null) {
             if (c instanceof MsgEmbeddedException)
@@ -52,6 +52,7 @@ public class GlobalControllerAdvice {
     @ExceptionHandler({MsgEmbeddedException.class})
     @ResponseBody
     public Result<?> handleMsgEmbeddedException(MsgEmbeddedException e) {
+        log.info("MsgEmbeddedException thrown", e);
         String errorMsg = e.getMsg();
         if (!StringUtils.hasText(errorMsg)) {
             errorMsg = "Invalid request";
@@ -62,6 +63,7 @@ public class GlobalControllerAdvice {
     @ExceptionHandler({UnrecoverableException.class})
     @ResponseBody
     public Result<?> handleUnrecoverableMsgEmbeddedException(UnrecoverableException e) {
+        log.info("UnrecoverableException thrown", e);
         String errorMsg = e.getEmbeddedMsg();
         if (!StringUtils.hasText(errorMsg)) {
             errorMsg = "Invalid request";
@@ -72,6 +74,7 @@ public class GlobalControllerAdvice {
     @ExceptionHandler({MethodArgumentNotValidException.class})
     @ResponseBody
     public Result<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        log.info("Validation failed", e);
         final BindingResult bindingResult = e.getBindingResult();
         final List<FieldError> fieldErrors = bindingResult.getFieldErrors();
 

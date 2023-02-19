@@ -57,7 +57,6 @@ public final class TraceUtils {
     public static void putTUser(TUser tu) {
         Assert.notNull(tu, "tUser == null");
         Assert.notNull(tu.getUsername(), "tUser.username == null");
-        Assert.notNull(tu.getRole(), "tUser.role == null");
         Assert.notNull(tu.getUserNo(), "tUser.userNo == null");
         Assert.notNull(tu.getRoleNo(), "tUser.roleNo == null");
 
