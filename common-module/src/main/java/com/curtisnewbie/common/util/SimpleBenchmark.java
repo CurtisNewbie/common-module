@@ -19,9 +19,9 @@ public final class SimpleBenchmark {
         final long spent = (end - start);
         final double eachMilli = (double) spent / (double) iterations;
         if (name != null)
-            System.out.printf("%-30s iterations: %,d  total spent: %,5dms %,16d op/s\n", name, iterations, spent, (long) (1000d / eachMilli));
+            System.out.printf("%-30s iterations: %,d  total spent: %,7d ms %,16d op/s\n", name, iterations, spent, (long) (1000d / eachMilli));
         else
-            System.out.printf("iterations: %,d  total spent: %,5dms %,16d op/s\n", iterations, spent, (long) (1000d / eachMilli));
+            System.out.printf("iterations: %,d  total spent: %,7d ms %,16d op/s\n", iterations, spent, (long) (1000d / eachMilli));
     }
 
     public static void benchmark(long iterations, Runnable r) {
