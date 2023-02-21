@@ -27,7 +27,7 @@ public final class StructUtils {
 
     /** Find any that matches the predicate */
     public static <T> Optional<T> any(Collection<T> collection, Predicate<T> predicate) {
-        return collection.stream().filter(predicate::test).findAny();
+        return collection.stream().filter(predicate).findAny();
     }
 
     /** Find any (nullable) that matches the predicate */
@@ -37,7 +37,7 @@ public final class StructUtils {
 
     /** Find first that matches the predicate */
     public static <T> Optional<T> first(Collection<T> collection, Predicate<T> predicate) {
-        return collection.stream().filter(predicate::test).findFirst();
+        return collection.stream().filter(predicate).findFirst();
     }
 
     /** Find first (nullable) that matches the predicate */
@@ -78,7 +78,7 @@ public final class StructUtils {
 
     /** Build new HashSet */
     public static <T> Set<T> newHashSet(T... targs) {
-        Set<T> s = new HashSet<>();
+        Set<T> s = new HashSet<>(targs.length);
         for (T t : targs) {
             s.add(t);
         }
